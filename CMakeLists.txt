@@ -1,0 +1,39 @@
+cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+project(SampleCppNetlibTdd)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if(CMAKE_CXX_COMPILER_VERSION LESS "3.5")
+    message(FATAL_ERROR "A supported Clang version is equal to or greater than 3.5!")
+  endif()
+else()
+  message(FATAL_ERROR "Supported compiler is Clang!")
+endif()
+
+find_package(Boost 1.56 REQUIRED system thread)
+find_package(OpenSSL REQUIRED)
+
+set(CMAKE_CXX_FLAGS "-std=gnu++14 -stdlib=libc++ -Wall -Wextra -Wno-unused-parameter")
+
+include_directories(
+  ${PROJECT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/vendor/cpp-netlib
+  ${Boost_INCLUDE_DIRS}
+  ${OPENSSL_INCLUDE_DIR}
+)
+link_directories(
+  ${PROJECT_SOURCE_DIR}/vendor/gen/cpp-netlib/libs/network/src
+)
+add_definitions(
+  -DBOOST_NETWORK_ENABLE_HTTPS
+)
+
+file(GLOB_RECURSE SampleCppNetlibTdd_SOURCES "src/*.cpp")
+
+add_executable(main ${SampleCppNetlibTdd_SOURCES})
+
+target_link_libraries(main
+  ${Boost_LIBRARIES}
+  ${OPENSSL_LIBRARIES}
+  cppnetlib-uri
+  cppnetlib-client-connections
+)
