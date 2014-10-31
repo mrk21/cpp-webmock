@@ -1,2 +1,4 @@
-sample_cpp-netlib_tdd
+cpp-netlib-mock
 =====================
+
+A mock library for cpp-netlib.
