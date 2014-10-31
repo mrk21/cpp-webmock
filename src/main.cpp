@@ -25,7 +25,7 @@ namespace http { namespace impl {
         using resolver_type = typename resolver<Tag>::type;
         using string_type = typename string<Tag>::type;
         using body_callback_function_type = function<
-            void (boost::iterator_range<char const *> const &, system::error_code const &)>;
+            void (iterator_range<char const *> const &, system::error_code const &)>;
         using body_generator_function_type = function<bool(string_type &)>;
         
         dummy_client(
@@ -78,9 +78,14 @@ namespace http { namespace impl {
 int main() {
     namespace network = boost::network;
     namespace http = network::http;
-    using client_type = http::basic_client<http::tags::http_dummy_8bit_tcp_resolve, 1,1>;
+#if 1
+    using tag = http::tags::http_dummy_8bit_tcp_resolve;
+#else
+    using tag = http::tags::http_async_8bit_tcp_resolve;
+#endif
+    using client_type = http::basic_client<tag,1,1>;
     
-    client_type::request request("http://www.hoge.jp");
+    client_type::request request("http://www.boost.org");
     request << network::header("Connection","close");
     client_type client;
     client_type::response response = client.get(request);
@@ -89,7 +94,7 @@ int main() {
     std::cout << http::status(response) << std::endl;
     std::cout << http::body(response) << std::endl;
     
-    for (auto & h: network::headers(response)) {
+    for (auto & h: http::headers(response)) {
         std::cout << h.first << ": " << h.second << std::endl;
     }
     
