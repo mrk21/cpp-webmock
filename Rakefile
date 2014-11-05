@@ -5,22 +5,15 @@ directory 'gen'
 task :default => :build
 
 desc 'Build'
-task :build => [:vendor, 'CMakeLists.txt'] do
-  Dir.chdir('gen') do
-    sh 'make'
-    sh './main'
-  end
-end
-
-task :vendor do
+task :build => 'gen' do
   Dir.chdir 'vendor' do
     sh 'rake'
   end
-end
-
-file 'CMakeLists.txt' => 'gen' do
+  
   Dir.chdir('gen') do
     sh 'cmake ..'
+    sh 'make'
+    sh './main'
   end
 end
 
