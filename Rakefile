@@ -13,7 +13,6 @@ task :build => 'gen' do
   Dir.chdir('gen') do
     sh 'cmake ..'
     sh 'make'
-    sh './main'
   end
 end
 

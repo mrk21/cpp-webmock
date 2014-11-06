@@ -36,9 +36,11 @@ namespace boost { namespace network { namespace http { namespace impl {
             body_callback_function_type callback,
             body_generator_function_type generator
         ) {
-            return mock::get_request_manager<Tag>()[
-                {method, request.uri().string()}
-            ]->request(method, request);
+            auto uri = request.uri().string();
+            if (auto handler = mock::get_request_manager<Tag>()[{method, uri}]) {
+                return handler->request(request);
+            }
+            return {};
         }
     };
     

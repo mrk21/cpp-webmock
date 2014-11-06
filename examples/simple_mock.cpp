@@ -8,10 +8,8 @@ int main() {
 #if 1
     using tag = http::tags::http_mock_8bit_tcp_resolve;
     
-    network::mock::simple_mock<tag>("GET", "http://www.boost.org", [](auto method, auto request){
+    network::mock::simple_mock<tag>("GET", "http://www.boost.org", [](auto && request){
         std::cout << "#request" << std::endl;
-        std::cout << method << std::endl;
-        std::cout << request.uri().string() << std::endl;
         for (auto && h: network::headers(request)) {
             std::cout << h.first << ": " << h.second << std::endl;
         }

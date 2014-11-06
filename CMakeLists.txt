@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
-project(SampleCppNetlibTdd)
+project(CppNetLibMock)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   if(CMAKE_CXX_COMPILER_VERSION LESS "3.5")
@@ -11,6 +11,7 @@ endif()
 
 find_package(Boost 1.56 REQUIRED system thread)
 find_package(OpenSSL REQUIRED)
+find_package(Threads REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-std=gnu++14 -stdlib=libc++ -Wall -Wextra -Wno-unused-parameter")
 
@@ -26,14 +27,11 @@ link_directories(
 add_definitions(
   -DBOOST_NETWORK_ENABLE_HTTPS
 )
-
-file(GLOB_RECURSE SampleCppNetlibTdd_SOURCES "src/*.cpp")
-
-add_executable(main ${SampleCppNetlibTdd_SOURCES})
-
-target_link_libraries(main
+set(CppNetLibMock_LIBLARIES
   ${Boost_LIBRARIES}
   ${OPENSSL_LIBRARIES}
   cppnetlib-uri
   cppnetlib-client-connections
 )
+
+add_subdirectory(examples)

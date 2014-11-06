@@ -46,8 +46,9 @@ namespace boost { namespace network { namespace mock {
         std::string const & uri,
         typename simple_request_handler<Tag>::callback_type callback
     ) {
-        return mock::get_request_manager<Tag>()[{method, uri}] =
-            std::make_shared<simple_request_handler<Tag>>(callback);
+        auto result = std::make_shared<simple_request_handler<Tag>>(callback);
+        mock::get_request_manager<Tag>()[{method, uri}] = result;
+        return result;
     }
 }}}
 
