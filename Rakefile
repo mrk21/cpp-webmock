@@ -16,6 +16,17 @@ task :build => 'gen' do
   end
 end
 
+desc 'Test'
+task :test => 'gen' do
+  Dir.chdir 'vendor' do
+    sh 'rake'
+  end
+  
+  Dir.chdir('gen') do
+    sh 'cmake ..'
+    sh 'make build_test test ARGS=-V'
+  end
+end
 desc 'Clean'
 task :clean => 'gen' do
   Dir.chdir('gen') do
