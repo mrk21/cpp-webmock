@@ -1,5 +1,4 @@
 #include <webmock/condition_list.hpp>
-#include <iostream>
 
 namespace webmock {
     void condition_list::add(condition_type condition) {

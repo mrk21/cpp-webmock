@@ -11,6 +11,9 @@ namespace webmock {
         std::multimap<std::string, std::string> headers;
         std::string body;
     };
+    
+    bool operator ==(request const & lop, request const & rop);
+    bool operator !=(request const & lop, request const & rop);
 }
 
 #endif

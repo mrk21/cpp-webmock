@@ -1,6 +1,5 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
 #include <webmock/condition_list.hpp>
-#include <memory>
 
 namespace webmock {
 go_bandit([]{
