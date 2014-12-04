@@ -16,14 +16,13 @@ function(spec_build_commands)
   foreach(path IN LISTS sources)
     get_filename_component(name ${path} NAME_WE)
     set(target "${name}_bin")
-    
     add_executable(${target} ${path})
     target_link_libraries(${target}
+      ${cpp-webmock_LIBNAME}
       spec_main
       gmock
       gtest
     )
-    
     add_test(
       NAME ${name}
       COMMAND ${target} --reporter=spec

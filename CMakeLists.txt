@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
-project(CppWebmock)
+project(cpp-webmock)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   if(CMAKE_CXX_COMPILER_VERSION LESS "3.5")
@@ -26,13 +26,9 @@ link_directories(
 add_definitions(
   -DBOOST_NETWORK_ENABLE_HTTPS
 )
-set(CppWebmock_LIBLARIES
-  ${Boost_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
-  cppnetlib-uri
-  cppnetlib-client-connections
-)
+set(cpp-webmock_LIBNAME webmock CACHE STRING [[A library name of cpp-webmock.]])
 
 enable_testing()
+add_subdirectory(lib)
 add_subdirectory(examples)
 add_subdirectory(test)
