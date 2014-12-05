@@ -9,7 +9,7 @@ namespace webmock {
     }
     
     response stub::get_response(webmock::request const & request) {
-        if (this->sequences.size() == 0) return response{};
+        if (this->sequences.size() == 0) return {};
         if (this->sequences.size() > 1 && this->sequences.front().is_end()) {
             this->sequences.pop();
         }

@@ -12,7 +12,7 @@ endif()
 find_package(Boost 1.56 REQUIRED system thread)
 find_package(OpenSSL REQUIRED)
 
-set(CMAKE_CXX_FLAGS "-std=gnu++14 -stdlib=libc++ -Wall -Wextra -Wno-unused-parameter")
+set(CMAKE_CXX_FLAGS "-std=gnu++14 -stdlib=libc++ -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers")
 
 include_directories(
   ${PROJECT_SOURCE_DIR}

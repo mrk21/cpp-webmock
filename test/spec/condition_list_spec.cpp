@@ -10,7 +10,7 @@ go_bandit([]{
             describe("when this was empty", [&]{
                 it("should be true", [&]{
                     condition_list list;
-                    AssertThat(list.match(webmock::request{}), Equals(true));
+                    AssertThat(list.match({}), Equals(true));
                 });
             });
             
@@ -19,7 +19,7 @@ go_bandit([]{
                     condition_list list;
                     list.add([](auto &&){ return true; });
                     list.add([](auto &&){ return true; });
-                    AssertThat(list.match(webmock::request{}), Equals(true));
+                    AssertThat(list.match({}), Equals(true));
                 });
             });
             
@@ -28,7 +28,7 @@ go_bandit([]{
                     condition_list list;
                     list.add([](auto &&){ return true; });
                     list.add([](auto &&){ return false; });
-                    AssertThat(list.match(webmock::request{}), Equals(false));
+                    AssertThat(list.match({}), Equals(false));
                 });
             });
         });

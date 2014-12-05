@@ -8,19 +8,17 @@ go_bandit([]{
     describe("webmock::response_sequence", []{
         describe("#is_end()", [&]{
             it("should return a true as many times as specified by this count", [&]{
-                response target{"200", "test", {
-                    {"Content-Type","text/plane"},
-                }};
+                response target{"200","test"};
                 response_sequence sequence(2, [&](auto &&){ return target; });
                 
                 AssertThat(sequence.is_end(), Equals(false));
-                AssertThat(sequence.get_response(request{}), Equals(target));
+                AssertThat(sequence.get_response({}), Equals(target));
                 
                 AssertThat(sequence.is_end(), Equals(false));
-                AssertThat(sequence.get_response(request{}), Equals(target));
+                AssertThat(sequence.get_response({}), Equals(target));
                 
                 AssertThat(sequence.is_end(), Equals(true));
-                AssertThat(sequence.get_response(request{}), Equals(target));
+                AssertThat(sequence.get_response({}), Equals(target));
             });
         });
     });
