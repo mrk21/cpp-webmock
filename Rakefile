@@ -23,8 +23,9 @@ task :test => 'gen' do
   end
   
   Dir.chdir('gen') do
+    options = ENV['t'].nil? ? '--output-on-failure' : "-V #{ENV['t']}"
     sh 'cmake ..'
-    sh 'make build_test test ARGS=-V'
+    sh "make build_test test ARGS='#{options}'"
   end
 end
 desc 'Clean'

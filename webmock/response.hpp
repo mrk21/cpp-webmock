@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <iostream>
 
 namespace webmock {
     struct response {
@@ -13,6 +14,7 @@ namespace webmock {
     
     bool operator ==(response const & lop, response const & rop);
     bool operator !=(response const & lop, response const & rop);
+    std::ostream & operator <<(std::ostream & lop, response const & rop);
 }
 
 #endif
