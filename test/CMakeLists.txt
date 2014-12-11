@@ -11,31 +11,33 @@ link_directories(
   ${PROJECT_SOURCE_DIR}/vendor/gen/gmock/gtest
 )
 
-function(spec_build_commands)
-  file(GLOB sources *_spec.cpp)
+file(GLOB_RECURSE sources *_spec.cpp)
+
+add_executable(spec_bin
+  spec_runner.cpp
+  ${sources}
+)
+target_link_libraries(spec_bin
+  webmock
+  gmock
+  gtest
+)
+cotire(spec_bin)
+
+add_custom_target(spec
+  COMMAND spec_bin --reporter=spec
+  WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+  DEPENDS spec_bin
+)
+
+foreach(path IN LISTS sources)
+  string(REPLACE ${PROJECT_SOURCE_DIR}/test/spec webmock name ${path})
+  string(REPLACE _spec.cpp "" name ${name})
+  string(REPLACE / :: name ${name})
   
-  foreach(path IN LISTS sources)
-    get_filename_component(name ${path} NAME_WE)
-    set(target "${name}_bin")
-    add_executable(${target} ${path})
-    target_link_libraries(${target}
-      ${cpp-webmock_LIBNAME}
-      spec_main
-      gmock
-      gtest
-    )
-    cotire(${target})
-    add_test(
-      NAME ${name}
-      COMMAND ${target} --reporter=spec
-      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-    )
-    add_dependencies(build_test ${target})
-  endforeach()
-endfunction()
-
-add_custom_target(build_test)
-add_library(spec_main spec_main.cpp)
-cotire(spec_main)
-
-add_subdirectory(spec)
+  add_test(
+    NAME ${path}
+    COMMAND spec_bin --only=${name}
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+  )
+endforeach()
