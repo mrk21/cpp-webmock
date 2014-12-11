@@ -14,6 +14,9 @@ find_package(OpenSSL REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-std=gnu++14 -stdlib=libc++ -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers")
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/vendor/cotire/CMake)
+include(cotire)
+
 include_directories(
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/vendor/cpp-netlib

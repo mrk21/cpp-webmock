@@ -10,6 +10,7 @@ link_directories(
   ${PROJECT_SOURCE_DIR}/vendor/gen/gmock
   ${PROJECT_SOURCE_DIR}/vendor/gen/gmock/gtest
 )
+
 function(spec_build_commands)
   file(GLOB sources *_spec.cpp)
   
@@ -23,6 +24,7 @@ function(spec_build_commands)
       gmock
       gtest
     )
+    cotire(${target})
     add_test(
       NAME ${name}
       COMMAND ${target} --reporter=spec
@@ -34,4 +36,6 @@ endfunction()
 
 add_custom_target(build_test)
 add_library(spec_main spec_main.cpp)
+cotire(spec_main)
+
 add_subdirectory(spec)

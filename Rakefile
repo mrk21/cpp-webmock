@@ -11,7 +11,7 @@ task :build => 'gen' do
   end
   
   Dir.chdir('gen') do
-    sh 'cmake ..'
+    sh 'cmake -DCOTIRE_MINIMUM_NUMBER_OF_TARGET_SOURCES=1 ..'
     sh 'make example'
   end
 end
@@ -24,7 +24,7 @@ task :test => 'gen' do
   
   Dir.chdir('gen') do
     options = ENV['t'].nil? ? '--output-on-failure' : "-V -R #{ENV['t']}"
-    sh 'cmake ..'
+    sh 'cmake -DCOTIRE_MINIMUM_NUMBER_OF_TARGET_SOURCES=1  ..'
     sh "make build_test test ARGS='#{options}'"
   end
 end

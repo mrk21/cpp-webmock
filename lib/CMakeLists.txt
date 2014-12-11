@@ -9,3 +9,4 @@ target_link_libraries(${cpp-webmock_LIBNAME}
   cppnetlib-uri
   cppnetlib-client-connections
 )
+cotire(${cpp-webmock_LIBNAME})

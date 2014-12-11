@@ -7,3 +7,6 @@
 [submodule "vendor/bandit"]
 	path = vendor/bandit
 	url = https://github.com/joakimkarlsson/bandit.git
+[submodule "vendor/cotire"]
+	path = vendor/cotire
+	url = https://github.com/sakra/cotire.git
