@@ -13,31 +13,34 @@ link_directories(
 
 file(GLOB_RECURSE sources *_spec.cpp)
 
-add_executable(spec_bin
+add_executable(spec_runner
   spec_runner.cpp
   ${sources}
 )
-target_link_libraries(spec_bin
+target_link_libraries(spec_runner
   webmock
   gmock
   gtest
 )
-cotire(spec_bin)
+cotire(spec_runner)
 
 add_custom_target(spec
-  COMMAND spec_bin --reporter=spec
-  WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-  DEPENDS spec_bin
+  COMMAND $<TARGET_FILE:spec_runner> --reporter=spec
+  DEPENDS spec_runner
 )
 
 foreach(path IN LISTS sources)
-  string(REPLACE ${PROJECT_SOURCE_DIR}/test/spec webmock name ${path})
-  string(REPLACE _spec.cpp "" name ${name})
-  string(REPLACE / :: name ${name})
+  string(REPLACE ${PROJECT_SOURCE_DIR}/test/spec/ "" basepath ${path})
+  string(REPLACE _spec.cpp "" basepath ${basepath})
+  string(REPLACE / :: name webmock/${basepath})
   
   add_test(
-    NAME ${path}
-    COMMAND spec_bin --only=${name}
-    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+    NAME ${name}
+    COMMAND $<TARGET_FILE:spec_runner> --only=${name}
+  )
+  set_property(TEST ${name} PROPERTY LABELS
+    ${path}
+    ${PROJECT_SOURCE_DIR}/lib/${basepath}.cpp
+    ${PROJECT_SOURCE_DIR}/webmock/${basepath}.hpp
   )
 endforeach()

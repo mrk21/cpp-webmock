@@ -23,15 +23,6 @@ task :build => ['vendor/gen','gen'] do
   end
 end
 
-desc 'Test'
-task :test => ['vendor/gen','gen'] do
-  Dir.chdir('gen') do
-    options = '--output-on-failure' 
-    options += " -R #{ENV['t']}" unless ENV['t'].nil?
-    sh "make spec_bin test ARGS='#{options}'"
-  end
-end
-
 desc 'Spec'
 task :spec => ['vendor/gen','gen'] do
   Dir.chdir('gen') do
