@@ -1,5 +1,5 @@
-#ifndef WEBMOCK_DIRECTIVE_HPP
-#define WEBMOCK_DIRECTIVE_HPP
+#ifndef WEBMOCK_DIRECTIVE_RESPONSE_HPP
+#define WEBMOCK_DIRECTIVE_RESPONSE_HPP
 
 #include <webmock/response_sequence.hpp>
 
@@ -30,13 +30,12 @@ namespace webmock { namespace directive {
         }
     };
     
-    
     struct static_response: public response_base<static_response> {
         static_response(webmock::response const & response) :
             response_base<static_response>([=](auto &&){
                 return response;
-            }
-        ) {}
+            })
+        {}
     };
     
     inline static_response response(webmock::response const & response) {

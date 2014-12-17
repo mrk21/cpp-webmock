@@ -24,7 +24,7 @@ go_bandit([]{
             });
         });
         
-        describe("error<Exeption>(Types... args)", [&]{
+        describe("error<Exception>(Types... args)", [&]{
             it("should throw the Exception with the args", [&]{
                 struct my_exception: public std::exception {
                     int a;
@@ -48,7 +48,7 @@ go_bandit([]{
         });
         
         describe("error(T value)", [&]{
-            it("should throw with the value", [&]{
+            it("should throw the value", [&]{
                 {
                     response_sequence seq = error(1);
                     AssertThrows(int, seq.get_response({}));
