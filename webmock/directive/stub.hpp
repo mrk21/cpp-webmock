@@ -20,7 +20,7 @@ namespace webmock { namespace directive {
         return rop.add_sequence(lop);
     }
     
-    webmock::stub & operator <<(webmock::stub & rop, condition_list::condition_type lop) {
+    inline webmock::stub & operator <<(webmock::stub & rop, condition_list::condition_type lop) {
         return rop.add_condition(lop);
     }
 }}

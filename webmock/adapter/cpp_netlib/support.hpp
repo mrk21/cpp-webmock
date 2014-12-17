@@ -1,5 +1,5 @@
-#ifndef BOOST_NETWORK_MOCK_SUPPORT_HPP
-#define BOOST_NETWORK_MOCK_SUPPORT_HPP
+#ifndef WEBMOCK_ADAPTER_CPP_NETLIB_SUPPORT_HPP
+#define WEBMOCK_ADAPTER_CPP_NETLIB_SUPPORT_HPP
 
 #include <boost/network/protocol/http/tags.hpp>
 #include <boost/utility/enable_if.hpp>

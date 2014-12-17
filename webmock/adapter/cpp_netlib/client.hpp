@@ -1,9 +1,13 @@
-#ifndef BOOST_NETWORK_MOCK_CLIENT_HPP
-#define BOOST_NETWORK_MOCK_CLIENT_HPP
+#ifndef WEBMOCK_ADAPTER_CPP_NETLIB_CLIENT_HPP
+#define WEBMOCK_ADAPTER_CPP_NETLIB_CLIENT_HPP
 
+#include <boost/lexical_cast.hpp>
 #include <boost/network/protocol/http/client/pimpl.hpp>
-#include <boost/network/mock/support.hpp>
-#include <boost/network/mock/request_manager.hpp>
+#include <webmock/adapter/cpp_netlib/support.hpp>
+
+#include <webmock/request.hpp>
+#include <webmock/response.hpp>
+#include <webmock/directive/registry.hpp>
 
 namespace boost { namespace network { namespace http { namespace impl {
     template <class Tag, unsigned version_major, unsigned version_minor>
@@ -36,10 +40,27 @@ namespace boost { namespace network { namespace http { namespace impl {
             body_callback_function_type callback,
             body_generator_function_type generator
         ) {
-            auto uri = request.uri().string();
-            if (auto handler = mock::get_request_manager<Tag>()[{method, uri}]) {
-                return handler->request(request);
+            webmock::request webmock_request;
+            webmock_request.method = method;
+            webmock_request.url = request.uri().string();
+            for (auto && header: http::headers(request)) {
+                webmock_request.headers.insert(header);
             }
+            webmock_request.body = http::body(request);
+            
+            if (auto && webmock_response = webmock::directive::registry().access(webmock_request)) {
+                basic_response<Tag> response;
+                response
+                    << http::status(lexical_cast<int>(webmock_response->status))
+                    << network::body(webmock_response->body);
+                
+                for (auto && header: webmock_response->headers) {
+                    response << network::header(header.first, header.second);
+                }
+                
+                return response;
+            }
+            
             return {};
         }
     };

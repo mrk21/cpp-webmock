@@ -1,5 +1,5 @@
-#ifndef BOOST_NETWORK_MOCK_TAGS_HPP
-#define BOOST_NETWORK_MOCK_TAGS_HPP
+#ifndef WEBMOCK_ADAPTER_CPP_NETLIB_TAGS_HPP
+#define WEBMOCK_ADAPTER_CPP_NETLIB_TAGS_HPP
 
 #include <boost/network/protocol/http/tags.hpp>
 
