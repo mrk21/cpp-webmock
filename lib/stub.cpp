@@ -15,4 +15,14 @@ namespace webmock {
         }
         return this->sequences.front().get_response(request);
     }
+    
+    stub & stub::add_condition(condition_list::condition_type condition) {
+        this->conditions.add(condition);
+        return *this;
+    }
+    
+    stub & stub::add_sequence(response_sequence const & sequence) {
+        this->sequences.push(sequence);
+        return *this;
+    }
 }

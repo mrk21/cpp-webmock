@@ -30,6 +30,7 @@ namespace webmock { namespace directive {
         }
     };
     
+    
     struct static_response: public response_base<static_response> {
         static_response(webmock::response const & response) :
             response_base<static_response>([=](auto &&){
@@ -46,7 +47,7 @@ namespace webmock { namespace directive {
     struct dynamic_response: public response_base<dynamic_response> {
         using response_base<dynamic_response>::response_base;
     };
-
+    
     inline dynamic_response response(dynamic_response::generator_type generator) {
         return {generator};
     }

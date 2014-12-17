@@ -2,8 +2,9 @@
 #include <boost/range/algorithm.hpp>
 
 namespace webmock {
-    void stub_registry::add(webmock::stub const & stub) {
+    stub & stub_registry::add(webmock::stub const & stub) {
         this->stubs.push_back(stub);
+        return this->stubs.back();
     }
     
     boost::optional<response> stub_registry::access(webmock::request const & request) {

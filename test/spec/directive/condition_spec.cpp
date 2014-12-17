@@ -13,32 +13,37 @@ go_bandit([]{
             "{\"hoge\": 1}"
         };
         
-        describe("method(value)", [&]{
+        describe("with(lambda)", [&]{
             it("should be true", [&]{
-                AssertThat(method("PUT")(req), Equals(true));
-                AssertThat(method(std::regex("PUT|GET"))(req), Equals(true));
+                AssertThat(with([](auto &&){ return true; })(req), Equals(true));
             });
         });
         
-        describe("url(value)", [&]{
+        describe("with_method(value)", [&]{
             it("should be true", [&]{
-                AssertThat(url("http://www.foobar.com/path/to/resource")(req), Equals(true));
-                AssertThat(url(std::regex("http://www.foobar.com/.*"))(req), Equals(true));
+                AssertThat(with_method("PUT")(req), Equals(true));
+                AssertThat(with_method(std::regex("PUT|GET"))(req), Equals(true));
             });
         });
         
-        describe("body(value)", [&]{
+        describe("with_url(value)", [&]{
             it("should be true", [&]{
-                AssertThat(body("{\"hoge\": 1}")(req), Equals(true));
-                AssertThat(body(std::regex("\\{\"hoge\": \\d\\}"))(req), Equals(true));
+                AssertThat(with_url("http://www.foobar.com/path/to/resource")(req), Equals(true));
+                AssertThat(with_url(std::regex("http://www.foobar.com/.*"))(req), Equals(true));
             });
         });
         
-        
-        describe("header(key, value)", [&]{
+        describe("with_body(value)", [&]{
             it("should be true", [&]{
-                AssertThat(header("Content-Type","application/json")(req), Equals(true));
-                AssertThat(header("Content-Type", std::regex("application/(json|xml)"))(req), Equals(true));
+                AssertThat(with_body("{\"hoge\": 1}")(req), Equals(true));
+                AssertThat(with_body(std::regex("\\{\"hoge\": \\d\\}"))(req), Equals(true));
+            });
+        });
+        
+        describe("with_header(key, value)", [&]{
+            it("should be true", [&]{
+                AssertThat(with_header("Content-Type","application/json")(req), Equals(true));
+                AssertThat(with_header("Content-Type", std::regex("application/(json|xml)"))(req), Equals(true));
             });
         });
     });

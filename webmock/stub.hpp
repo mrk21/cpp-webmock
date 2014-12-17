@@ -14,9 +14,11 @@ namespace webmock {
         std::queue<response_sequence> sequences;
         
     public:
-        stub(condition_list const & conditions, std::initializer_list<response_sequence> sequences);
+        stub(condition_list const & conditions, std::initializer_list<response_sequence> sequences = {});
         bool match(webmock::request const & request) const;
         response get_response(webmock::request const & request);
+        stub & add_condition(condition_list::condition_type condition);
+        stub & add_sequence(response_sequence const & sequence);
     };
 }
 

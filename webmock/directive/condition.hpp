@@ -28,29 +28,30 @@ namespace webmock { namespace directive {
     };
     
     template <std::string request::*Attribute>
-    class string_condition_base {
+    class with_string_attribute {
         matcher match;
         
     public:
         template <typename T>
-        string_condition_base(T const & value) : match(value) {}
+        with_string_attribute(T const & value) : match(value) {}
         
         bool operator ()(request const & req) const {
             return this->match(req.*Attribute);
         }
     };
     
-    using method = string_condition_base<&request::method>;
-    using url = string_condition_base<&request::url>;
-    using body = string_condition_base<&request::body>;
+    using with = condition_list::condition_type;
+    using with_method = with_string_attribute<&request::method>;
+    using with_url = with_string_attribute<&request::url>;
+    using with_body = with_string_attribute<&request::body>;
     
-    class header {
+    class with_header {
         std::string key;
         matcher match;
         
     public:
         template <typename T>
-        header(std::string const & key, T const & value) :
+        with_header(std::string const & key, T const & value) :
             key(key), match(value) {}
         
         bool operator ()(request const & req) const {

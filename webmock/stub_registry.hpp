@@ -14,7 +14,7 @@ namespace webmock {
         std::vector<request> request_history;
         
     public:
-        void add(webmock::stub const & stub);
+        stub & add(webmock::stub const & stub);
         boost::optional<response> access(webmock::request const & request);
         std::size_t count_requests(condition_list const & conditions) const;
     };
