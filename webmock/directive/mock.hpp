@@ -6,7 +6,8 @@
 #include <boost/optional.hpp>
 
 namespace webmock { namespace directive {
-    class mock {
+    template <typename Derived>
+    class mock_base {
     protected:
         using condition_type = condition_list::condition_type;
         
@@ -15,20 +16,20 @@ namespace webmock { namespace directive {
         boost::optional<std::size_t> mutable cached_count;
         
     public:
-        mock(
+        mock_base(
             with_url const & url,
             stub_registry & registry = directive::registry()
-        ) : conditions({url}), registry(registry) {
-            this->after_initialize();
-        }
+        ) :
+            conditions({url}), registry(registry)
+        {}
         
-        mock(
+        mock_base(
             with_method const & method,
             with_url const & url,
             stub_registry & registry = directive::registry()
-        ) : conditions({method, url}), registry(registry) {
-            this->after_initialize();
-        }
+        ) :
+            conditions({method, url}), registry(registry)
+        {}
         
         std::size_t count() const {
             if (!this->cached_count) {
@@ -41,18 +42,24 @@ namespace webmock { namespace directive {
             return this->count();
         }
         
-        mock & operator <<(condition_type rop) & {
-            this->conditions.add(rop);
-            return *this;
+        void add_condition(condition_type condition) {
+            this->conditions.add(condition);
         }
         
-        mock operator <<(condition_type rop) && {
-            this->conditions.add(rop);
-            return *this;
+        friend Derived & operator <<(Derived & lop, condition_type rop) {
+            lop.add_condition(rop);
+            return lop;
         }
         
-    protected:
-        virtual void after_initialize() {}
+        friend Derived && operator <<(Derived && lop, condition_type rop) {
+            lop.add_condition(rop);
+            return std::move(lop);
+        }
+    };
+    
+    class mock: public mock_base<mock> {
+    public:
+        using mock_base<mock>::mock_base;
     };
 }}
 

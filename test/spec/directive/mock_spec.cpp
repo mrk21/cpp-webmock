@@ -30,6 +30,10 @@ go_bandit([]{
                     {"Content-Type", "application/json"}
                 }, "response3"});
                 
+                auto && m = mock{"POST", "http://www.hogebar.com/", registry}; m
+                    << with_header("Content-Type", "application/json")
+                    << with_body(std::regex("^response.*$"));
+                
                 AssertThat(static_cast<int>(
                     mock{"POST", "http://www.hogebar.com/", registry}
                         << with_header("Content-Type", "application/json")
