@@ -31,14 +31,14 @@ go_bandit([]{
                 }, "response3"});
                 
                 auto && m = mock{"POST", "http://www.hogebar.com/", registry}; m
-                    << with_header("Content-Type", "application/json")
+                    .conditions(with_header("Content-Type", "application/json"))
                     << with_body(std::regex("^response.*$"));
                 
-                AssertThat(static_cast<int>(
-                    mock{"POST", "http://www.hogebar.com/", registry}
-                        << with_header("Content-Type", "application/json")
-                        << with_body(std::regex("^response.*$"))
-                ), Equals(1));
+                AssertThat(mock("POST", "http://www.hogebar.com/", registry)
+                    .conditions(with_header("Content-Type", "application/json"))
+                    .conditions(with_body(std::regex("^response.*$")))
+                    .count()
+                , Equals(1));
             });
         });
     });

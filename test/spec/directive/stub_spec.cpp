@@ -10,17 +10,21 @@ go_bandit([]{
             core::stub_registry registry;
             
             directive::stub{"http://www.hogebar.jp/", registry}
-                << with_header("Content-Type", "application/json")
-                << with_body(std::regex("^response.*$"))
-                << response({"200"}) * 2
-                << error<std::exception>().times(2)
+                .conditions(
+                    with_header("Content-Type", "application/json"),
+                    with_body(std::regex("^response.*$"))
+                )
+                .returns(
+                    response({"200"}) * 2,
+                    error<std::exception>().times(2)
+                )
                 << response({"404"});
             
             auto && s = directive::stub{"POST", "http://www.hogebar.com/", registry}; s
-                << with_header("Content-Type", "application/json")
-                << with_body(std::regex("^response.*$"))
-                << response({"200"}) * 2
-                << error<std::exception>().times(2)
+                .conditions(with_header("Content-Type", "application/json"))
+                .conditions(with_body(std::regex("^response.*$")))
+                .returns(response({"200"}) * 2)
+                .returns(error<std::exception>().times(2))
                 << response({"404"});
             
             core::request const req{

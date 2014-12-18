@@ -12,6 +12,13 @@ namespace webmock { namespace directive {
         
     public:
         stub(
+            core::stub_registry & registry = detail::registry()
+        ) :
+            mock_base(registry),
+            data(this->init_data())
+        {}
+        
+        stub(
             with_url const & url,
             core::stub_registry & registry = detail::registry()
         ) :
@@ -28,28 +35,33 @@ namespace webmock { namespace directive {
             data(this->init_data())
         {}
         
-        void add_sequence(core::response_sequence const & sequence) {
-            this->data.add_sequence(sequence);
+        template <typename... Types>
+        auto returns(Types... sequences) {
+            this->add_sequences({sequences...});
+            return this->derived();
         }
         
-        void add_condition(condition_type condition) {
-            mock_base::add_condition(condition);
-            this->data.add_condition(condition);
+        friend auto operator <<(stub & lop, core::response_sequence const & rop) {
+            return lop.returns(rop);
         }
         
-        friend stub & operator <<(stub & lop, core::response_sequence const & rop) {
-            lop.add_sequence(rop);
-            return lop;
+        friend auto operator <<(stub && lop, core::response_sequence const & rop) {
+            return lop.returns(rop);
         }
         
-        friend stub && operator <<(stub && lop, core::response_sequence const & rop) {
-            lop.add_sequence(rop);
-            return std::move(lop);
+    protected:
+        virtual void add_conditions(std::initializer_list<condition_type> conditions) {
+            mock_base::add_conditions(conditions);
+            for (auto && c: conditions) this->data.add_condition(c);
+        }
+        
+        virtual void add_sequences(std::initializer_list<core::response_sequence> sequences) {
+            for (auto && s: sequences) this->data.add_sequence(s);
         }
         
     private:
         core::stub & init_data() {
-            return this->registry.add({this->conditions});
+            return this->registry.add({this->conditions_});
         }
     };
 }}
