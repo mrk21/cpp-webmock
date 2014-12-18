@@ -37,8 +37,13 @@ add_definitions(
 set_directory_properties(PROPERTIES
   COTIRE_PREFIX_HEADER_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/vendor
 )
+set(cpp-webmock_LIBRARIES
+  ${Boost_LIBRARIES}
+  ${OPENSSL_LIBRARIES}
+  cppnetlib-uri
+  cppnetlib-client-connections
+)
 
 enable_testing()
-add_subdirectory(lib)
 add_subdirectory(examples)
 add_subdirectory(test)

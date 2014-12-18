@@ -15,9 +15,17 @@ namespace webmock {
         response_generator_type response_generator;
         
     public:
-        response_sequence(std::size_t count, response_generator_type response_generator);
-        bool is_end() const;
-        response get_response(webmock::request const & request);
+        response_sequence(std::size_t count, response_generator_type response_generator)
+            : count(count), response_generator(response_generator) {}
+        
+        bool is_end() const {
+            return this->count == 0;
+        }
+        
+        response get_response(webmock::request const & request) {
+            if (this->count > 0) --this->count;
+            return this->response_generator(request);
+        }
     };
 }
 

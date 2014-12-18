@@ -12,13 +12,15 @@ link_directories(
 )
 
 file(GLOB_RECURSE sources *_spec.cpp)
+file(GLOB_RECURSE headers RELATIVE ${PROJECT_SOURCE_DIR}/webmock *.hpp)
 
 add_executable(spec_runner
   spec_runner.cpp
   ${sources}
+  ${headers}
 )
 target_link_libraries(spec_runner
-  webmock
+  ${cpp-webmock_LIBRARIES}
   gmock
   gtest
 )

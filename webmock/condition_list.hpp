@@ -16,9 +16,20 @@ namespace webmock {
         
     public:
         condition_list() = default;
-        condition_list(std::initializer_list<condition_type> conditions);
-        void add(condition_type condition);
-        bool match(webmock::request const & request) const;
+        
+        condition_list(std::initializer_list<condition_type> conditions)
+            : conditions(conditions) {}
+        
+        void add(condition_type condition) {
+            this->conditions.push_back(condition);
+        }
+        
+        bool match(webmock::request const & request) const {
+            for (auto && condition: this->conditions) {
+                if (!condition(request)) return false;
+            }
+            return true;
+        }
     };
 }
 
