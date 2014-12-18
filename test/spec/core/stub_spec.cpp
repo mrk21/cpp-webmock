@@ -1,11 +1,11 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/stub.hpp>
+#include <webmock/core/stub.hpp>
 
-namespace webmock {
+namespace webmock { namespace core {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::stub", []{
+    describe("webmock::core::stub", []{
         describe("#get_response(request)", [&]{
             it("should return a response specified by this sequences, and if came to an end of the last sequence, then keep returning that response", [&]{
                 response res1{"200","test1"};
@@ -36,4 +36,4 @@ go_bandit([]{
         });
     });
 });
-}
+}}

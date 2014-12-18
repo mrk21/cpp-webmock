@@ -5,9 +5,9 @@
 #include <boost/network/protocol/http/client/pimpl.hpp>
 #include <webmock/adapter/cpp_netlib/support.hpp>
 
-#include <webmock/request.hpp>
-#include <webmock/response.hpp>
-#include <webmock/directive/registry.hpp>
+#include <webmock/core/request.hpp>
+#include <webmock/core/response.hpp>
+#include <webmock/directive/detail/registry.hpp>
 
 namespace boost { namespace network { namespace http { namespace impl {
     template <class Tag, unsigned version_major, unsigned version_minor>
@@ -40,7 +40,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             body_callback_function_type callback,
             body_generator_function_type generator
         ) {
-            webmock::request webmock_request;
+            webmock::core::request webmock_request;
             webmock_request.method = method;
             webmock_request.url = request.uri().string();
             for (auto && header: http::headers(request)) {
@@ -48,7 +48,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             }
             webmock_request.body = http::body(request);
             
-            if (auto && webmock_response = webmock::directive::registry().access(webmock_request)) {
+            if (auto && webmock_response = webmock::directive::detail::registry().access(webmock_request)) {
                 basic_response<Tag> response;
                 response
                     << http::status(lexical_cast<int>(webmock_response->status))

@@ -1,11 +1,11 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/condition_list.hpp>
+#include <webmock/core/condition_list.hpp>
 
-namespace webmock {
+namespace webmock { namespace core {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::condition_list", []{
+    describe("webmock::core::condition_list", []{
         describe("#match(request)", [&]{
             describe("when this was empty", [&]{
                 it("should be true", [&]{
@@ -34,4 +34,4 @@ go_bandit([]{
         });
     });
 });
-}
+}}

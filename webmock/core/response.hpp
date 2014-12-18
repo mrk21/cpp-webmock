@@ -1,12 +1,12 @@
-#ifndef WEBMOCK_RESPONSE_HPP
-#define WEBMOCK_RESPONSE_HPP
+#ifndef WEBMOCK_CORE_RESPONSE_HPP
+#define WEBMOCK_CORE_RESPONSE_HPP
 
 #include <string>
 #include <map>
 #include <iostream>
 #include <tuple>
 
-namespace webmock {
+namespace webmock { namespace core {
     struct response {
         std::string status;
         std::string body;
@@ -30,6 +30,6 @@ namespace webmock {
         lop << rop.body << "\n";
         return lop;
     }
-}
+}}
 
 #endif

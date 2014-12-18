@@ -1,26 +1,26 @@
-#ifndef WEBMOCK_STUB_REGISTRY_HPP
-#define WEBMOCK_STUB_REGISTRY_HPP
+#ifndef WEBMOCK_CORE_STUB_REGISTRY_HPP
+#define WEBMOCK_CORE_STUB_REGISTRY_HPP
 
-#include <webmock/request.hpp>
-#include <webmock/response.hpp>
-#include <webmock/stub.hpp>
-#include <webmock/condition_list.hpp>
+#include <webmock/core/request.hpp>
+#include <webmock/core/response.hpp>
+#include <webmock/core/stub.hpp>
+#include <webmock/core/condition_list.hpp>
 #include <vector>
 #include <boost/optional.hpp>
 #include <boost/range/algorithm.hpp>
 
-namespace webmock {
+namespace webmock { namespace core {
     class stub_registry {
         std::vector<stub> stubs;
         std::vector<request> request_history;
         
     public:
-        stub & add(webmock::stub const & stub) {
+        stub & add(core::stub const & stub) {
             this->stubs.push_back(stub);
             return this->stubs.back();
         }
         
-        boost::optional<response> access(webmock::request const & request) {
+        boost::optional<response> access(core::request const & request) {
             this->request_history.push_back(request);
             for (auto && stub: this->stubs) {
                 if (stub.match(request)) return stub.get_response(request);
@@ -34,6 +34,6 @@ namespace webmock {
             });
         }
     };
-}
+}}
 
 #endif

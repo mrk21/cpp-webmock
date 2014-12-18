@@ -13,7 +13,7 @@ go_bandit([]{
             using tag = http::tags::http_mock_8bit_tcp_resolve;
             using client_type = http::basic_client<tag,1,1>;
             
-            webmock::response webmock_response{
+            core::response webmock_response{
                 "200",
                 "test",
                 {{"Content-Type","text/plane"}}

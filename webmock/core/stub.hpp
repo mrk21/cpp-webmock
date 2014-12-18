@@ -1,14 +1,14 @@
-#ifndef WEBMOCK_STUB_HPP
-#define WEBMOCK_STUB_HPP
+#ifndef WEBMOCK_CORE_STUB_HPP
+#define WEBMOCK_CORE_STUB_HPP
 
-#include <webmock/request.hpp>
-#include <webmock/request.hpp>
-#include <webmock/condition_list.hpp>
-#include <webmock/response_sequence.hpp>
+#include <webmock/core/request.hpp>
+#include <webmock/core/request.hpp>
+#include <webmock/core/condition_list.hpp>
+#include <webmock/core/response_sequence.hpp>
 #include <queue>
 #include <initializer_list>
 
-namespace webmock {
+namespace webmock { namespace core {
     class stub {
         condition_list conditions;
         std::queue<response_sequence> sequences;
@@ -17,11 +17,11 @@ namespace webmock {
         stub(condition_list const & conditions, std::initializer_list<response_sequence> sequences = {})
             : conditions(conditions), sequences(sequences) {}
         
-        bool match(webmock::request const & request) const {
+        bool match(core::request const & request) const {
             return this->conditions.match(request);
         }
         
-        response get_response(webmock::request const & request) {
+        response get_response(core::request const & request) {
             if (this->sequences.size() == 0) return {};
             if (this->sequences.size() > 1 && this->sequences.front().is_end()) {
                 this->sequences.pop();
@@ -39,6 +39,6 @@ namespace webmock {
             return *this;
         }
     };
-}
+}}
 
 #endif

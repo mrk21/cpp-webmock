@@ -6,7 +6,7 @@ go_bandit([]{
     using namespace bandit;
     
     describe("webmock::directive::condition", []{
-        request const req{
+        core::request const req{
             "PUT",
             "http://www.foobar.com/path/to/resource",
             {{"Content-Type","application/json"}},

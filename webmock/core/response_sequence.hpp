@@ -1,11 +1,11 @@
-#ifndef WEBMOCK_RESPONSE_SEQUENCE_HPP
-#define WEBMOCK_RESPONSE_SEQUENCE_HPP
+#ifndef WEBMOCK_CORE_RESPONSE_SEQUENCE_HPP
+#define WEBMOCK_CORE_RESPONSE_SEQUENCE_HPP
 
-#include <webmock/response.hpp>
-#include <webmock/request.hpp>
+#include <webmock/core/response.hpp>
+#include <webmock/core/request.hpp>
 #include <functional>
 
-namespace webmock {
+namespace webmock { namespace core {
     class response_sequence {
     public:
         using response_generator_type = std::function<response(request const &)>;
@@ -22,11 +22,11 @@ namespace webmock {
             return this->count == 0;
         }
         
-        response get_response(webmock::request const & request) {
+        response get_response(core::request const & request) {
             if (this->count > 0) --this->count;
             return this->response_generator(request);
         }
     };
-}
+}}
 
 #endif

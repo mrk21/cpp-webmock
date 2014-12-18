@@ -1,12 +1,12 @@
-#ifndef WEBMOCK_REQUEST_HPP
-#define WEBMOCK_REQUEST_HPP
+#ifndef WEBMOCK_CORE_REQUEST_HPP
+#define WEBMOCK_CORE_REQUEST_HPP
 
 #include <string>
 #include <map>
 #include <iostream>
 #include <tuple>
 
-namespace webmock {
+namespace webmock { namespace core {
     struct request {
         std::string method;
         std::string url;
@@ -31,6 +31,6 @@ namespace webmock {
         lop << rop.body << "\n";
         return lop;
     }
-}
+}}
 
 #endif

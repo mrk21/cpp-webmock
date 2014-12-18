@@ -1,12 +1,12 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/stub_registry.hpp>
+#include <webmock/core/stub_registry.hpp>
 #include <memory>
 
-namespace webmock {
+namespace webmock { namespace core {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::stub_registry", []{
+    describe("webmock::core::stub_registry", []{
         std::string const url = "http://www.example.com";
         response const res1{"200","test1"};
         response const res2{"200","test2"};
@@ -59,4 +59,4 @@ go_bandit([]{
         });
     });
 });
-}
+}}

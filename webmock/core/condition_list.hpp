@@ -1,12 +1,12 @@
-#ifndef WEBMOCK_CONDITION_LIST_HPP
-#define WEBMOCK_CONDITION_LIST_HPP
+#ifndef WEBMOCK_CORE_CONDITION_LIST_HPP
+#define WEBMOCK_CORE_CONDITION_LIST_HPP
 
-#include <webmock/request.hpp>
+#include <webmock/core/request.hpp>
 #include <vector>
 #include <functional>
 #include <initializer_list>
 
-namespace webmock {
+namespace webmock { namespace core {
     class condition_list {
     public:
         using condition_type = std::function<bool(request const &)>;
@@ -24,13 +24,13 @@ namespace webmock {
             this->conditions.push_back(condition);
         }
         
-        bool match(webmock::request const & request) const {
+        bool match(core::request const & request) const {
             for (auto && condition: this->conditions) {
                 if (!condition(request)) return false;
             }
             return true;
         }
     };
-}
+}}
 
 #endif

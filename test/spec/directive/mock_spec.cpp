@@ -8,7 +8,7 @@ go_bandit([]{
     describe("webmock::directive::mock", []{
         describe("#count()", [&]{
             it("should be a number of an access matched by this conditions, and the number should be cached by first result", [&]{
-                stub_registry registry;
+                core::stub_registry registry;
                 registry.access({"GET", "http://www.hogefuga.com/1"});
                 registry.access({"PUT", "http://www.hogefuga.com/2"});
                 registry.access({"GET", "http://www.hogefuga.jp/3"});
@@ -24,7 +24,7 @@ go_bandit([]{
         
         describe("#operator <<(condition_type rop)", [&]{
             it("should add the condition_type", [&]{
-                stub_registry registry;
+                core::stub_registry registry;
                 registry.access({"POST", "http://www.hogebar.com/"});
                 registry.access({"POST", "http://www.hogebar.com/", {
                     {"Content-Type", "application/json"}

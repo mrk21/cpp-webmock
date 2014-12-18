@@ -7,7 +7,7 @@ go_bandit([]{
     
     describe("webmock::directive::stub", []{
         it("should build", [&]{
-            stub_registry registry;
+            core::stub_registry registry;
             
             directive::stub{"http://www.hogebar.jp/", registry}
                 << with_header("Content-Type", "application/json")
@@ -23,7 +23,7 @@ go_bandit([]{
                 << error<std::exception>().times(2)
                 << response({"404"});
             
-            request const req{
+            core::request const req{
                 "POST",
                 "http://www.hogebar.com/",
                 {{"Content-Type", "application/json"}},
