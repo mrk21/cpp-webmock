@@ -32,7 +32,7 @@ go_bandit([]{
             it("should be a response of first matching stub to the request", [&]{
                 auto && res = registry->access({"GET", url});
                 AssertThat(res == boost::none, Equals(false));
-                AssertThat(*res, Equals(res1));
+                AssertThat(*res, Equals(res2));
             });
             
             describe("when matching stub to the request not found", [&]{

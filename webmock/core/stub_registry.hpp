@@ -6,18 +6,19 @@
 #include <webmock/core/stub.hpp>
 #include <webmock/core/condition_list.hpp>
 #include <vector>
+#include <deque>
 #include <boost/optional.hpp>
 #include <boost/range/algorithm.hpp>
 
 namespace webmock { namespace core {
     class stub_registry {
-        std::vector<stub> stubs;
+        std::deque<stub> stubs;
         std::vector<request> request_history;
         
     public:
         stub & add(core::stub const & stub) {
-            this->stubs.push_back(stub);
-            return this->stubs.back();
+            this->stubs.push_front(stub);
+            return this->stubs.front();
         }
         
         boost::optional<response> access(core::request const & request) {
