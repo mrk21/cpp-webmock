@@ -14,6 +14,27 @@ go_bandit([]{
             });
         });
         
+        describe("response().status().body() ...", [&]{
+            it("should be a response by the query", [&]{
+                core::response_sequence seq = response()
+                    .status("200")
+                    .body("test")
+                    .header("Content-Type","application/json")
+                    .header({
+                        {"Set-Cookie","a=1;"},
+                        {"Set-Cookie","b=2;"},
+                    })
+                ;
+                AssertThat(seq.get_response({}), Equals(core::response{
+                    "200", "test", {
+                        {"Content-Type", "application/json"},
+                        {"Set-Cookie","a=1;"},
+                        {"Set-Cookie","b=2;"},
+                    }
+                }));
+            });
+        });
+        
         describe("response(generator)", [&]{
             it("should be a response created by the generator", [&]{
                 core::response_sequence seq = response([](auto && req){

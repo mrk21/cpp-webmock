@@ -4,7 +4,7 @@
 #include <webmock/api/detail/response.hpp>
 
 namespace webmock { namespace api {
-    inline detail::static_response response(core::response const & response) {
+    inline detail::static_response response(core::response const & response = {}) {
         return {response};
     }
     

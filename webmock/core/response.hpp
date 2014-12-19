@@ -8,9 +8,11 @@
 
 namespace webmock { namespace core {
     struct response {
+        using header_type = std::multimap<std::string, std::string>;
+        
         std::string status;
         std::string body;
-        std::multimap<std::string, std::string> headers;
+        header_type headers;
     };
     
     inline bool operator ==(response const & lop, response const & rop) {
