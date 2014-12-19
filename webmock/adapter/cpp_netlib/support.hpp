@@ -6,10 +6,10 @@
 
 namespace boost { namespace network { namespace http {
     template <class Tag, class Enable = void>
-    struct is_mock : mpl::false_ {};
+    struct is_webmock_adapter : mpl::false_ {};
     
     template <class Tag>
-    struct is_mock<Tag, typename enable_if<typename Tag::is_mock>::type> : mpl::true_ {};
+    struct is_webmock_adapter<Tag, typename enable_if<typename Tag::is_webmock_adapter>::type> : mpl::true_ {};
 }}}
 
 #endif

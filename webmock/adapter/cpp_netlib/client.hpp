@@ -3,15 +3,15 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/network/protocol/http/client/pimpl.hpp>
-#include <webmock/adapter/cpp_netlib/support.hpp>
 
+#include <webmock/adapter/cpp_netlib/support.hpp>
 #include <webmock/core/request.hpp>
 #include <webmock/core/response.hpp>
 #include <webmock/api/detail/registry.hpp>
 
 namespace boost { namespace network { namespace http { namespace impl {
     template <class Tag, unsigned version_major, unsigned version_minor>
-    struct mock_client {
+    struct webmock_adapter_client {
         using response_type = basic_response<Tag>;
         using resolver_type = typename resolver<Tag>::type;
         using string_type = typename string<Tag>::type;
@@ -19,7 +19,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             void (iterator_range<char const *> const &, system::error_code const &)>;
         using body_generator_function_type = function<bool(string_type &)>;
         
-        mock_client(
+        webmock_adapter_client(
             bool cache_resolved,
             bool follow_redirect,
             bool always_verify_peer,
@@ -57,19 +57,17 @@ namespace boost { namespace network { namespace http { namespace impl {
                 for (auto && header: webmock_response->headers) {
                     response << network::header(header.first, header.second);
                 }
-                
                 return response;
             }
-            
             return {};
         }
     };
     
     template <class Tag, unsigned version_major, unsigned version_minor>
     struct client_base<Tag, version_major, version_minor,
-        typename enable_if<is_mock<Tag>>::type>
+        typename enable_if<is_webmock_adapter<Tag>>::type>
     {
-        using type = mock_client<Tag, version_major, version_minor>;
+        using type = webmock_adapter_client<Tag, version_major, version_minor>;
     };
 }}}}
 

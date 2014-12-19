@@ -1,6 +1,6 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
 #include <webmock/adapter/cpp_netlib.hpp>
-#include <webmock/api/stub.hpp>
+#include <webmock/api.hpp>
 
 namespace webmock { namespace adapter { namespace cpp_netlib {
 go_bandit([]{
@@ -8,23 +8,23 @@ go_bandit([]{
     
     describe("webmock::adapter::cpp_netlib", []{
         it("should swap the implementation", [&]{
+            using namespace api::directive;
             namespace network = boost::network;
             namespace http = network::http;
-            using tag = http::tags::http_mock_8bit_tcp_resolve;
-            using client_type = http::basic_client<tag,1,1>;
             
             core::response webmock_response{
                 "200",
                 "test",
                 {{"Content-Type","text/plane"}}
             };
-            webmock::api::stub("http://www.boost.org")
-                << webmock::api::response(webmock_response);
-            
-            client_type::request request("http://www.boost.org");
+            api::stub{"GET","http://www.boost.org"}
+                .conditions(with_header("Connection","close"))
+                .returns(response(webmock_response))
+            ;
+            client::request request("http://www.boost.org");
             request << network::header("Connection","close");
-            client_type client;
-            client_type::response response = client.get(request);
+            client c;
+            client::response response = c.get(request);
             
             AssertThat(
                 static_cast<int>(http::status(response)),
