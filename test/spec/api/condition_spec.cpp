@@ -9,7 +9,12 @@ go_bandit([]{
         core::request const req{
             "PUT",
             "http://www.foobar.com/path/to/resource",
-            {{"Content-Type","application/json"}},
+            {
+                {"Content-Type","application/json"},
+                {"Set-Cookie","a=1;"},
+                {"Set-Cookie","b=2;"},
+                {"Set-Cookie","c=2a;"},
+            },
             "{\"hoge\": 1}"
         };
         
@@ -44,6 +49,8 @@ go_bandit([]{
             it("should be true", [&]{
                 AssertThat(with_header("Content-Type","application/json")(req), Equals(true));
                 AssertThat(with_header("Content-Type", std::regex("application/(json|xml)"))(req), Equals(true));
+                AssertThat(with_header("Set-Cookie", std::regex("[a-z]=.+;"))(req), Equals(true));
+                AssertThat(with_header("Set-Cookie", std::regex("[a-z]=\\d;"))(req), Equals(false));
             });
         });
     });

@@ -11,10 +11,13 @@ namespace webmock { namespace core {
         using response_generator_type = std::function<response(request const &)>;
         
     private:
-        std::size_t count;
+        std::size_t count = 1;
         response_generator_type response_generator;
         
     public:
+        response_sequence(response_generator_type response_generator)
+            : response_generator(response_generator) {}
+        
         response_sequence(std::size_t count, response_generator_type response_generator)
             : count(count), response_generator(response_generator) {}
         
