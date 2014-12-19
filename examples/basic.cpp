@@ -12,7 +12,7 @@ void access() {
     namespace webmock_adapter = webmock::adapter::cpp_netlib;
     using client_type = typename webmock_adapter::select_by_param<Enabled, Tag,1,1>::type;
     
-    api::stub{"GET","http://www.boost.org/"}.returns(response({"200"}).body("test"));
+    a_stub{"GET","http://www.boost.org/"}.returns(a_response({"200"}).body("test"));
     
     typename client_type::request request("http://www.boost.org/");
     request << network::header("Connection","close");
@@ -21,7 +21,7 @@ void access() {
     
     std::cout << "status: " << http::status(result) << std::endl;
     std::cout << "body: " << http::body(result) << std::endl;
-    std::cout << "access count: " << api::mock{}.conditions(with_method("GET")) << std::endl;
+    std::cout << "access count: " << a_request{}.conditions(with_method("GET")) << std::endl;
 }
 
 int main() {

@@ -6,19 +6,20 @@
 #include <webmock/api/response.hpp>
 
 namespace webmock { namespace api {
-    class stub: public detail::mock_base<stub> {
+inline namespace directive {
+    class a_stub: public detail::mock_base<a_stub> {
     protected:
         core::stub & data;
         
     public:
-        stub(
+        a_stub(
             core::stub_registry & registry = detail::registry()
         ) :
             mock_base(registry),
             data(this->init_data())
         {}
         
-        stub(
+        a_stub(
             with_url const & url,
             core::stub_registry & registry = detail::registry()
         ) :
@@ -26,7 +27,7 @@ namespace webmock { namespace api {
             data(this->init_data())
         {}
         
-        stub(
+        a_stub(
             with_method const & method,
             with_url const & url,
             core::stub_registry & registry = detail::registry()
@@ -41,11 +42,11 @@ namespace webmock { namespace api {
             return this->derived();
         }
         
-        friend auto operator <<(stub & lop, core::response_sequence const & rop) {
+        friend auto operator <<(a_stub & lop, core::response_sequence const & rop) {
             return lop.returns(rop);
         }
         
-        friend auto operator <<(stub && lop, core::response_sequence const & rop) {
+        friend auto operator <<(a_stub && lop, core::response_sequence const & rop) {
             return lop.returns(rop);
         }
         
@@ -64,6 +65,7 @@ namespace webmock { namespace api {
             return this->registry.add({this->conditions_});
         }
     };
+}
 }}
 
 #endif

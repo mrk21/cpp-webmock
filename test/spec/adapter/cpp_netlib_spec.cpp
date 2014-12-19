@@ -12,19 +12,19 @@ go_bandit([]{
             namespace network = boost::network;
             namespace http = network::http;
             
-            core::response webmock_response{
+            webmock::response webmock_response{
                 "200",
                 "test",
                 {{"Content-Type","text/plane"}}
             };
-            api::stub{"GET","http://www.boost.org"}
+            a_stub{"GET","http://www.boost.org"}
                 .conditions(with_header("Connection","close"))
-                .returns(response(webmock_response))
+                .returns(a_response(webmock_response))
             ;
-            client::request request("http://www.boost.org");
+            cpp_netlib::client::request request("http://www.boost.org");
             request << network::header("Connection","close");
-            client c;
-            client::response response = c.get(request);
+            cpp_netlib::client client;
+            cpp_netlib::client::response response = client.get(request);
             
             AssertThat(
                 static_cast<int>(http::status(response)),

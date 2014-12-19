@@ -4,10 +4,11 @@
 #include <webmock/api/detail/mock.hpp>
 
 namespace webmock { namespace api {
-    class mock: public detail::mock_base<mock> {
+inline namespace directive {
+    class a_request: public detail::mock_base<a_request> {
     public:
-        using detail::mock_base<mock>::mock_base;
+        using detail::mock_base<a_request>::mock_base;
     };
-}}
+}}}
 
 #endif

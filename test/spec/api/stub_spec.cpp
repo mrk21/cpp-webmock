@@ -9,23 +9,23 @@ go_bandit([]{
         it("should build", [&]{
             core::stub_registry registry;
             
-            api::stub{"http://www.hogebar.jp/", registry}
+            a_stub{"http://www.hogebar.jp/", registry}
                 .conditions(
                     with_header("Content-Type", "application/json"),
                     with_body(std::regex("^response.*$"))
                 )
                 .returns(
-                    response({"200"}) * 2,
-                    error<std::exception>().times(2)
+                    a_response({"200"}) * 2,
+                    an_error<std::exception>().times(2)
                 )
-                << response({"404"});
+                << a_response({"404"});
             
-            auto && s = api::stub{"POST", "http://www.hogebar.com/", registry}; s
+            auto && s = a_stub{"POST", "http://www.hogebar.com/", registry}; s
                 .conditions(with_header("Content-Type", "application/json"))
                 .conditions(with_body(std::regex("^response.*$")))
-                .returns(response({"200"}) * 2)
-                .returns(error<std::exception>().times(2))
-                << response({"404"});
+                .returns(a_response({"200"}).times(2))
+                << an_error<std::exception>() * 2
+                << a_response({"404"});
             
             core::request const req{
                 "POST",
