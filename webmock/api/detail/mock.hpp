@@ -1,12 +1,12 @@
-#ifndef WEBMOCK_DIRECTIVE_DETAIL_MOCK_HPP
-#define WEBMOCK_DIRECTIVE_DETAIL_MOCK_HPP
+#ifndef WEBMOCK_API_DETAIL_MOCK_HPP
+#define WEBMOCK_API_DETAIL_MOCK_HPP
 
-#include <webmock/directive/detail/registry.hpp>
-#include <webmock/directive/condition.hpp>
+#include <webmock/api/detail/registry.hpp>
+#include <webmock/api/condition.hpp>
 #include <initializer_list>
 #include <boost/optional.hpp>
 
-namespace webmock { namespace directive { namespace detail {
+namespace webmock { namespace api { namespace detail {
     template <typename Derived>
     class mock_base {
     protected:

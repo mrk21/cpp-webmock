@@ -7,7 +7,7 @@
 
 #include <webmock/core/request.hpp>
 #include <webmock/core/response.hpp>
-#include <webmock/directive/detail/registry.hpp>
+#include <webmock/api/detail/registry.hpp>
 
 namespace boost { namespace network { namespace http { namespace impl {
     template <class Tag, unsigned version_major, unsigned version_minor>
@@ -48,7 +48,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             }
             webmock_request.body = http::body(request);
             
-            if (auto && webmock_response = webmock::directive::detail::registry().access(webmock_request)) {
+            if (auto && webmock_response = webmock::api::detail::registry().access(webmock_request)) {
                 basic_response<Tag> response;
                 response
                     << http::status(lexical_cast<int>(webmock_response->status))

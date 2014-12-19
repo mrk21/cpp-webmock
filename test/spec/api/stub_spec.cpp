@@ -1,15 +1,15 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/directive/stub.hpp>
+#include <webmock/api/stub.hpp>
 
-namespace webmock { namespace directive {
+namespace webmock { namespace api {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::directive::stub", []{
+    describe("webmock::api::stub", []{
         it("should build", [&]{
             core::stub_registry registry;
             
-            directive::stub{"http://www.hogebar.jp/", registry}
+            api::stub{"http://www.hogebar.jp/", registry}
                 .conditions(
                     with_header("Content-Type", "application/json"),
                     with_body(std::regex("^response.*$"))
@@ -20,7 +20,7 @@ go_bandit([]{
                 )
                 << response({"404"});
             
-            auto && s = directive::stub{"POST", "http://www.hogebar.com/", registry}; s
+            auto && s = api::stub{"POST", "http://www.hogebar.com/", registry}; s
                 .conditions(with_header("Content-Type", "application/json"))
                 .conditions(with_body(std::regex("^response.*$")))
                 .returns(response({"200"}) * 2)

@@ -1,11 +1,11 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/directive/condition.hpp>
+#include <webmock/api/condition.hpp>
 
-namespace webmock { namespace directive {
+namespace webmock { namespace api {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::directive::condition", []{
+    describe("webmock::api::condition", []{
         core::request const req{
             "PUT",
             "http://www.foobar.com/path/to/resource",

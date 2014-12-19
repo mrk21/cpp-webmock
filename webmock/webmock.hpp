@@ -1,9 +1,9 @@
 #ifndef WEBMOCK_WEBMOCK_HPP
 #define WEBMOCK_WEBMOCK_HPP
 
-#include <webmock/directive/condition.hpp>
-#include <webmock/directive/response.hpp>
-#include <webmock/directive/mock.hpp>
-#include <webmock/directive/stub.hpp>
+#include <webmock/api/condition.hpp>
+#include <webmock/api/response.hpp>
+#include <webmock/api/mock.hpp>
+#include <webmock/api/stub.hpp>
 
 #endif

@@ -1,9 +1,9 @@
-#ifndef WEBMOCK_DIRECTIVE_CONDITION_HPP
-#define WEBMOCK_DIRECTIVE_CONDITION_HPP
+#ifndef WEBMOCK_API_CONDITION_HPP
+#define WEBMOCK_API_CONDITION_HPP
 
-#include <webmock/directive/detail/condition.hpp>
+#include <webmock/api/detail/condition.hpp>
 
-namespace webmock { namespace directive {
+namespace webmock { namespace api {
     using with = core::condition_list::condition_type;
     using with_method = detail::with_string_attribute<&core::request::method>;
     using with_url = detail::with_string_attribute<&core::request::url>;

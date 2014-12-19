@@ -1,9 +1,9 @@
-#ifndef WEBMOCK_DIRECTIVE_RESPONSE_HPP
-#define WEBMOCK_DIRECTIVE_RESPONSE_HPP
+#ifndef WEBMOCK_API_RESPONSE_HPP
+#define WEBMOCK_API_RESPONSE_HPP
 
-#include <webmock/directive/detail/response.hpp>
+#include <webmock/api/detail/response.hpp>
 
-namespace webmock { namespace directive {
+namespace webmock { namespace api {
     inline detail::static_response response(core::response const & response) {
         return {response};
     }

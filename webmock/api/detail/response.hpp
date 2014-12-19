@@ -1,9 +1,9 @@
-#ifndef WEBMOCK_DIRECTIVE_DETAIL_RESPONSE_HPP
-#define WEBMOCK_DIRECTIVE_DETAIL_RESPONSE_HPP
+#ifndef WEBMOCK_API_DETAIL_RESPONSE_HPP
+#define WEBMOCK_API_DETAIL_RESPONSE_HPP
 
 #include <webmock/core/response_sequence.hpp>
 
-namespace webmock { namespace directive { namespace detail {
+namespace webmock { namespace api { namespace detail {
     template <typename Derived>
     class response_base {
     public:

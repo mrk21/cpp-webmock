@@ -1,11 +1,11 @@
-#ifndef WEBMOCK_DIRECTIVE_STUB_HPP
-#define WEBMOCK_DIRECTIVE_STUB_HPP
+#ifndef WEBMOCK_API_STUB_HPP
+#define WEBMOCK_API_STUB_HPP
 
 #include <webmock/core/stub.hpp>
-#include <webmock/directive/detail/mock.hpp>
-#include <webmock/directive/response.hpp>
+#include <webmock/api/detail/mock.hpp>
+#include <webmock/api/response.hpp>
 
-namespace webmock { namespace directive {
+namespace webmock { namespace api {
     class stub: public detail::mock_base<stub> {
     protected:
         core::stub & data;

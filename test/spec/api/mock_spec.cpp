@@ -1,11 +1,11 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/directive/mock.hpp>
+#include <webmock/api/mock.hpp>
 
-namespace webmock { namespace directive {
+namespace webmock { namespace api {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::directive::mock", []{
+    describe("webmock::api::mock", []{
         describe("#count()", [&]{
             it("should be a number of an access matched by this conditions, and the number should be cached by first result", [&]{
                 core::stub_registry registry;

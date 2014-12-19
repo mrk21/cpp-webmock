@@ -1,6 +1,6 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
 #include <webmock/adapter/cpp_netlib.hpp>
-#include <webmock/directive/stub.hpp>
+#include <webmock/api/stub.hpp>
 
 namespace webmock { namespace adapter { namespace cpp_netlib {
 go_bandit([]{
@@ -18,8 +18,8 @@ go_bandit([]{
                 "test",
                 {{"Content-Type","text/plane"}}
             };
-            webmock::directive::stub("http://www.boost.org")
-                << webmock::directive::response(webmock_response);
+            webmock::api::stub("http://www.boost.org")
+                << webmock::api::response(webmock_response);
             
             client_type::request request("http://www.boost.org");
             request << network::header("Connection","close");

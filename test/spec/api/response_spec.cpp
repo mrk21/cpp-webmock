@@ -1,12 +1,12 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/directive/response.hpp>
+#include <webmock/api/response.hpp>
 #include <exception>
 
-namespace webmock { namespace directive {
+namespace webmock { namespace api {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::directive::response", []{
+    describe("webmock::api::response", []{
         describe("response(response)", [&]{
             it("should be the response", [&]{
                 core::response_sequence seq = response({"200"});

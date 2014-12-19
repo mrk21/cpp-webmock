@@ -1,11 +1,11 @@
-#ifndef WEBMOCK_DIRECTIVE_DETAIL_CONDITION_HPP
-#define WEBMOCK_DIRECTIVE_DETAIL_CONDITION_HPP
+#ifndef WEBMOCK_API_DETAIL_CONDITION_HPP
+#define WEBMOCK_API_DETAIL_CONDITION_HPP
 
 #include <webmock/core/condition_list.hpp>
 #include <functional>
 #include <regex>
 
-namespace webmock { namespace directive { namespace detail {
+namespace webmock { namespace api { namespace detail {
     class matcher {
         std::function<bool(std::string const &)> impl;
         
