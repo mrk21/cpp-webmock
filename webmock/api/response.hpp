@@ -4,6 +4,7 @@
 #include <webmock/api/detail/response.hpp>
 
 namespace webmock { namespace api {
+inline namespace response_directive {
     inline detail::static_response response(core::response const & response = {}) {
         return {response};
     }
@@ -25,6 +26,7 @@ namespace webmock { namespace api {
             throw value;
         }};
     }
+}
 }}
 
 #endif

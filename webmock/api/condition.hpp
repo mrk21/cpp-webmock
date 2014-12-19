@@ -7,6 +7,7 @@
 #include <boost/assign.hpp>
 
 namespace webmock { namespace api {
+inline namespace condition_directive {
     using with = core::condition_list::condition_type;
     using with_method = detail::with_string_attribute<&core::request::method>;
     using with_url = detail::with_string_attribute<&core::request::url>;
@@ -29,6 +30,7 @@ namespace webmock { namespace api {
             );
         }
     };
+}
 }}
 
 #endif
