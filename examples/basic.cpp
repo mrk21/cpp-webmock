@@ -1,35 +1,37 @@
 #include <iostream>
-#include <webmock/webmock.hpp>
+#include <webmock/api.hpp>
 #include <webmock/adapter/cpp_netlib.hpp>
 
-template <typename Tag>
+template <bool Enabled, typename Tag>
 void access() {
-    namespace directive = webmock::directive;
+    namespace api = webmock::api;
+    using namespace api::directive;
+    
     namespace network = boost::network;
     namespace http = network::http;
-    using client_type = http::basic_client<Tag,1,1>;
+    namespace webmock_adapter = webmock::adapter::cpp_netlib;
+    using client_type = typename webmock_adapter::select_by_param<Enabled, Tag,1,1>::type;
     
-    auto && stub = directive::stub{"GET","http://www.boost.org/"}
-        << directive::response({"200","test"});
+    api::stub{"GET","http://www.boost.org/"}.returns(response({"200"}).body("test"));
     
     typename client_type::request request("http://www.boost.org/");
     request << network::header("Connection","close");
     client_type client;
-    typename client_type::response response = client.get(request);
+    typename client_type::response result = client.get(request);
     
-    std::cout << "status: " << http::status(response) << std::endl;
-    std::cout << "body: " << http::body(response) << std::endl;
-    std::cout << "access count: " << stub << std::endl;
+    std::cout << "status: " << http::status(result) << std::endl;
+    std::cout << "body: " << http::body(result) << std::endl;
+    std::cout << "access count: " << api::mock{}.conditions(with_method("GET")) << std::endl;
 }
 
 int main() {
     namespace http = boost::network::http;
     
     std::cout << "## Normal" << std::endl;
-    access<http::tags::http_async_8bit_tcp_resolve>();
+    access<false, http::tags::http_async_8bit_tcp_resolve>();
     
     std::cout << "## Mock" << std::endl;
-    access<http::tags::http_mock_8bit_tcp_resolve>();
+    access<true, http::tags::http_async_8bit_tcp_resolve>();
     
     return 0;
 }
