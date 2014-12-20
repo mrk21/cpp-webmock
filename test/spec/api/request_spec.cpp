@@ -7,7 +7,7 @@ go_bandit([]{
     
     describe("webmock::api::request", []{
         describe("#count()", [&]{
-            it("should be a number of an access matched by this conditions, and the number should be cached by first result", [&]{
+            it("should be a number of an access matched by this conditions", [&]{
                 core::stub_registry registry;
                 registry.access({"GET", "http://www.hogefuga.com/1"});
                 registry.access({"PUT", "http://www.hogefuga.com/2"});
@@ -18,7 +18,7 @@ go_bandit([]{
                 
                 AssertThat(req.count(), Equals(2));
                 registry.access({"GET", "http://www.hogefuga.com/5"});
-                AssertThat(static_cast<int>(req), Equals(2));
+                AssertThat(static_cast<int>(req), Equals(3));
             });
         });
         

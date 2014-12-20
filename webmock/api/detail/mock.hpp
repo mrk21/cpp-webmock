@@ -4,7 +4,6 @@
 #include <webmock/api/detail/registry.hpp>
 #include <webmock/api/condition.hpp>
 #include <initializer_list>
-#include <boost/optional.hpp>
 
 namespace webmock { namespace api { namespace detail {
     template <typename Derived>
@@ -14,7 +13,6 @@ namespace webmock { namespace api { namespace detail {
         
         core::condition_list conditions_;
         core::stub_registry & registry;
-        boost::optional<std::size_t> mutable cached_count;
         
     public:
         mock_base(
@@ -39,10 +37,7 @@ namespace webmock { namespace api { namespace detail {
         {}
         
         std::size_t count() const {
-            if (!this->cached_count) {
-                this->cached_count = this->registry.count_requests(this->conditions_);
-            }
-            return *this->cached_count;
+            return this->registry.count_requests(this->conditions_);
         }
         
         operator std::size_t() const {
