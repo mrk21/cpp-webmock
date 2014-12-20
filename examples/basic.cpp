@@ -10,9 +10,11 @@ int main() {
     
     namespace network = boost::network;
     namespace http = network::http;
-    using client_type = typename webmock_adapter::select_by_type<enabled_webmock, http::client>::type;
+    using client_type =
+        typename webmock_adapter::select_by_type<enabled_webmock, http::client>::type;
     
-    a_stub("http://www.boost.org/users/history/version_1_56_0.html").returns(a_response({"200"}).body("test"));
+    a_stub("http://www.boost.org/users/history/version_1_56_0.html")
+        .returns(a_response({"200"}).body("test"));
     
     client_type::request request("http://www.boost.org/users/history/version_1_56_0.html");
     request << network::header("Connection","Close");
