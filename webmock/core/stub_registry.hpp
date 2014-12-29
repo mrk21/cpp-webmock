@@ -21,6 +21,11 @@ namespace webmock { namespace core {
             return this->stubs.front();
         }
         
+        void reset() {
+            this->stubs.clear();
+            this->request_history.clear();
+        }
+        
         boost::optional<response> access(core::request const & request) {
             this->request_history.push_back(request);
             for (auto && stub: this->stubs) {

@@ -11,4 +11,10 @@ namespace webmock {
     using core::response;
 }
 
+namespace webmock { namespace api {
+    inline void reset() {
+        detail::registry().reset();
+    }
+}}
+
 #endif
