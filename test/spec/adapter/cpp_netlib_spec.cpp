@@ -28,7 +28,7 @@ go_bandit([]{
             
             AssertThat(
                 static_cast<int>(http::status(response)),
-                Equals(boost::lexical_cast<int>(webmock_response.status))
+                Equals(static_cast<int>(webmock_response.status))
             );
             AssertThat(
                 static_cast<std::string>(http::body(response)),

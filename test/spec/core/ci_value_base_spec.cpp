@@ -15,6 +15,7 @@ go_bandit([]{
                 AssertThat(val("get") == "GET", Equals(true));
                 AssertThat(val("get") < "GET2", Equals(true));
                 AssertThat(static_cast<std::string>(val("get")), Equals("get"));
+                AssertThat((std::ostringstream() << val("get")).str(), Equals("get"));
             });
         });
     });

@@ -51,7 +51,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             if (auto && webmock_response = webmock::api::detail::registry().access(webmock_request)) {
                 basic_response<Tag> response;
                 response
-                    << http::status(lexical_cast<int>(webmock_response->status))
+                    << http::status(webmock_response->status)
                     << network::body(webmock_response->body);
                 
                 for (auto && header: webmock_response->headers) {

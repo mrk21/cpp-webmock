@@ -11,6 +11,22 @@ go_bandit([]{
                 AssertThat(static_cast<std::string>(method("get")), Equals("GET"));
             });
         });
+        
+        describe("::status", [&]{
+            it("should be able to construct from an integer", [&]{
+                AssertThat(status(200), Equals("200"));
+            });
+            
+            it("should convert an integer", [&]{
+                AssertThat(static_cast<unsigned int>(status("200")), Equals(200));
+            });
+            
+            describe("when the value not specified", [&]{
+                it("should be 200", [&]{
+                    AssertThat(status(), Equals("200"));
+                });
+            });
+        });
     });
 });
 }}}

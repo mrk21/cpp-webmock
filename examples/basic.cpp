@@ -14,7 +14,7 @@ int main() {
         typename webmock_adapter::select_by_type<enabled_webmock, http::client>::type;
     
     a_stub("http://www.boost.org/users/history/version_1_56_0.html")
-        .returns(a_response({"200"}).body("test"));
+        .returns(a_response().body("test"));
     
     client_type::request request("http://www.boost.org/users/history/version_1_56_0.html");
     request << network::header("Connection","Close");
