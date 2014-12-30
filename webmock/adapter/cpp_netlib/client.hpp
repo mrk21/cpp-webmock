@@ -1,6 +1,7 @@
 #ifndef WEBMOCK_ADAPTER_CPP_NETLIB_CLIENT_HPP
 #define WEBMOCK_ADAPTER_CPP_NETLIB_CLIENT_HPP
 
+#include <sstream>
 #include <boost/lexical_cast.hpp>
 #include <boost/network/protocol/http/client/pimpl.hpp>
 
@@ -8,6 +9,7 @@
 #include <webmock/core/request.hpp>
 #include <webmock/core/response.hpp>
 #include <webmock/api/detail/registry.hpp>
+
 
 namespace boost { namespace network { namespace http { namespace impl {
     template <class Tag, unsigned version_major, unsigned version_minor>
@@ -59,7 +61,11 @@ namespace boost { namespace network { namespace http { namespace impl {
                 }
                 return response;
             }
-            return {};
+            
+            throw (std::ostringstream()
+                << "A stub satisfying the request not found!\n"
+                << webmock_request
+            ).str();
         }
     };
     
