@@ -9,13 +9,13 @@
 namespace webmock { namespace api {
 inline namespace directive {
     using with = core::condition_list::condition_type;
-    using with_method = detail::with_string_attribute<&core::request::method>;
-    using with_url = detail::with_string_attribute<&core::request::url>;
-    using with_body = detail::with_string_attribute<&core::request::body>;
+    using with_method = detail::with_attribute<core::http::method, &core::request::method>;
+    using with_url = detail::with_attribute<std::string, &core::request::url>;
+    using with_body = detail::with_attribute<std::string, &core::request::body>;
     
     class with_header {
         std::string key;
-        detail::matcher match;
+        detail::matcher<std::string> match;
         
     public:
         template <typename ExpectedType>

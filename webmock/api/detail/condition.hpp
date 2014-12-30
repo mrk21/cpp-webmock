@@ -8,42 +8,42 @@
 #include <boost/operators.hpp>
 
 namespace webmock { namespace api { namespace detail {
-    class matcher: boost::equality_comparable<matcher, std::string> {
-        std::function<bool(std::string const &)> impl;
+    template <typename T>
+    class matcher: boost::equality_comparable<matcher<T>, std::string> {
+    public:
+        using value_type = T;
+        
+        std::function<bool(value_type const &)> impl;
         
     public:
-        matcher(std::string const & value) :
+        matcher(value_type const & value) :
             impl([=](auto && target){
                 return target == value;
             })
         {}
         
-        matcher(const char * value) :
-            matcher(std::string(value))
-        {}
-        
         matcher(std::regex const & pettern) :
             impl([=](auto && target){
-                return std::regex_match(target, pettern);
+                return std::regex_match(static_cast<std::string>(target), pettern);
             })
         {}
         
-        bool operator ==(std::string const & value) const {
+        bool operator ==(value_type const & value) const {
             return this->impl(value);
         }
         
-        bool operator ()(std::string const & value) const {
+        bool operator ()(value_type const & value) const {
             return this->impl(value);
         }
     };
     
-    template <std::string core::request::*Attribute>
-    class with_string_attribute {
-        matcher match;
+    template <typename T, T core::request::*Attribute>
+    class with_attribute {
+        matcher<T> match;
     
     public:
         template <typename ExpectedType>
-        with_string_attribute(ExpectedType const & value) : match(value) {}
+        with_attribute(ExpectedType const & value) : match(value) {}
         
         bool operator ()(core::request const & request) const {
             return this->match(request.*Attribute);

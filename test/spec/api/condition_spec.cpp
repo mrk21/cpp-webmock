@@ -27,6 +27,7 @@ go_bandit([]{
         describe("with_method(value)", [&]{
             it("should be true", [&]{
                 AssertThat(with_method("PUT")(req), Equals(true));
+                AssertThat(with_method("put")(req), Equals(true));
                 AssertThat(with_method(std::regex("PUT|GET"))(req), Equals(true));
             });
         });

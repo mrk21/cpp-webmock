@@ -5,12 +5,13 @@
 #include <map>
 #include <iostream>
 #include <tuple>
+#include <webmock/core/http.hpp>
 
 namespace webmock { namespace core {
     struct request {
         using header_type = std::multimap<std::string, std::string>;
         
-        std::string method;
+        http::method method;
         std::string url;
         header_type headers;
         std::string body;
