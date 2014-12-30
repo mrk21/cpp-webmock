@@ -14,12 +14,15 @@ inline namespace directive {
     using with_body = detail::with_attribute<std::string, &core::request::body>;
     
     class with_header {
-        std::string key;
-        detail::matcher<std::string> match;
+        using header_name_type = core::http::headers::key_type;
+        using header_value_type = core::http::headers::mapped_type;
+        
+        header_name_type key;
+        detail::matcher<header_value_type> match;
         
     public:
         template <typename ExpectedType>
-        with_header(std::string const & key, ExpectedType values) :
+        with_header(header_name_type const & key, ExpectedType values) :
             key(key), match(values) {}
         
         bool operator ()(core::request const & request) const {
