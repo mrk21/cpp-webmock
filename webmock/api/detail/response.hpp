@@ -53,7 +53,7 @@ namespace webmock { namespace api { namespace detail {
             return this->ref();
         }
         
-        auto header(core::response::header_type const & values) {
+        auto header(core::http::headers const & values) {
             this->set([=](auto && r){
                 for (auto && v: values) {
                     r.headers.insert(v);

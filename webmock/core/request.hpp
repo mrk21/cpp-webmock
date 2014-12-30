@@ -9,11 +9,9 @@
 
 namespace webmock { namespace core {
     struct request {
-        using header_type = std::multimap<std::string, std::string>;
-        
         http::method method;
         std::string url;
-        header_type headers;
+        http::headers headers;
         std::string body;
     };
     

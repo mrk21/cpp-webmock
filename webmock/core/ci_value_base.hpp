@@ -53,7 +53,7 @@ namespace webmock { namespace core {
         }
         
         friend std::ostream & operator <<(std::ostream & lop, Derived const & rop) {
-            return lop << rop.data.c_str();
+            return lop << static_cast<std::string>(rop);
         }
     };
 }}

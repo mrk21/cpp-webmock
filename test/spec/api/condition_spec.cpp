@@ -11,8 +11,8 @@ go_bandit([]{
             "http://www.foobar.com/path/to/resource",
             {
                 {"Content-Type","application/json"},
-                {"Set-Cookie","a=1;"},
-                {"Set-Cookie","b=2;"},
+                {"SET-COOKIE","a=1;"},
+                {"set-cookie","b=2;"},
                 {"Set-Cookie","c=2a;"},
             },
             "{\"hoge\": 1}"

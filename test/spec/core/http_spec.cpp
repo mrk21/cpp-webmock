@@ -12,6 +12,13 @@ go_bandit([]{
             });
         });
         
+        describe("::header_name", [&]{
+            it("should convert std::string that is camelcase", [&]{
+                AssertThat(static_cast<std::string>(header_name("TRANSFER-ENCODING")), Equals("Transfer-Encoding"));
+                AssertThat(static_cast<std::string>(header_name("transfer-encoding")), Equals("Transfer-Encoding"));
+            });
+        });
+        
         describe("::status", [&]{
             it("should be able to construct from an integer", [&]{
                 AssertThat(status(200), Equals("200"));
