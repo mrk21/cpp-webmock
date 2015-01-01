@@ -10,7 +10,7 @@ directory 'gen' do |t|
   FileUtils.mkdir_p t.name
   
   Dir.chdir(t.name) do
-    sh 'cmake ..'
+    sh 'cmake -DCOTIRE_MINIMUM_NUMBER_OF_TARGET_SOURCES=1 ..'
   end
 end
 
