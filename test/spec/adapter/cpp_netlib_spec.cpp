@@ -4,8 +4,19 @@
 #include <sstream>
 
 namespace webmock { namespace adapter { namespace cpp_netlib {
+namespace test {
+    struct callback_mock {
+        void operator ()(core::request const & req) {
+            this->call(req);
+            throw std::logic_error("message");
+        }
+        
+        MOCK_METHOD1(call, void(core::request const &));
+    };
+}
 go_bandit([]{
     using namespace bandit;
+    using namespace testing;
     
     describe("webmock::adapter::cpp_netlib", []{
         using namespace api::directive;
@@ -20,6 +31,7 @@ go_bandit([]{
         
         after_each([&]{
             api::reset();
+            api::stub_not_found_callback();
         });
         
         it("should swap the implementation", [&]{
@@ -47,14 +59,14 @@ go_bandit([]{
         });
         
         describe("when the stub satisfying the request not found", [&]{
-            it("should throw an exception", [&]{
-                webmock::request const webmock_request{
-                    "GET", "http://www.hogefuga.jp/path/to/bar.json", {
-                        {"Content-Type", "application/json"}
-                    },
-                    "{\"hoge\": 1}"
-                };
-                
+            webmock::request const webmock_request{
+                "GET", "http://www.hogefuga.jp/path/to/bar.json", {
+                    {"Content-Type", "application/json"}
+                },
+                "{\"hoge\": 1}"
+            };
+            
+            auto && access = [&]{
                 cpp_netlib::client::request request(webmock_request.url);
                 for (auto && header: webmock_request.headers) {
                     request << network::header(header.first, header.second);
@@ -62,11 +74,34 @@ go_bandit([]{
                 request << network::body(webmock_request.body);
                 
                 cpp_netlib::client client;
-                AssertThrows(std::string, client.get(request));
+                return client.get(request);
+            };
+            
+            it("should throw an exception", [&]{
+                AssertThrows(std::string, access());
                 AssertThat(LastException<std::string>(), Equals((std::ostringstream()
                     << "A stub satisfying the request not found!\n"
                     << webmock_request
                 ).str()));
+            });
+            
+            it("should not call the stub_not_found_callback", [&]{
+                test::callback_mock mock;
+                EXPECT_CALL(mock, call(_)).Times(AtLeast(0));
+                api::stub_not_found_callback([&](auto && req){ mock(req); });
+                try { access(); }
+                catch (...) {}
+            });
+            
+            describe("when the stub_not_found_callback was set", [&]{
+                it("should call the `stub_not_found_callback`, and throw the exception thrown by the callback", [&]{
+                    test::callback_mock mock;
+                    EXPECT_CALL(mock, call(webmock_request)).Times(AtLeast(1));
+                    api::stub_not_found_callback([&](auto && req){ mock(req); });
+                    
+                    AssertThrows(std::logic_error, access());
+                    AssertThat(LastException<std::logic_error>().what(), Equals("message"));
+                });
             });
         });
     });

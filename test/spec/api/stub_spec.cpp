@@ -7,9 +7,9 @@ go_bandit([]{
     
     describe("webmock::api::stub", []{
         it("should build", [&]{
-            core::stub_registry registry;
+            detail::application app;
             
-            a_stub{"http://www.hogebar.jp/", registry}
+            a_stub{"http://www.hogebar.jp/", app}
                 .conditions(
                     with_header("Content-Type", "application/json"),
                     with_body(std::regex("^response.*$"))
@@ -20,7 +20,7 @@ go_bandit([]{
                 )
                 << a_response({"404"});
             
-            auto && s = a_stub{"POST", "http://www.hogebar.com/", registry}; s
+            auto && s = a_stub{"POST", "http://www.hogebar.com/", app}; s
                 .conditions(with_header("Content-Type", "application/json"))
                 .conditions(with_body(std::regex("^response.*$")))
                 .returns(a_response({"200"}).times(2))
@@ -33,12 +33,12 @@ go_bandit([]{
                 {{"Content-Type", "application/json"}},
                 "response333"
             };
-            AssertThat(registry.access(req)->status, Equals("200"));
-            AssertThat(registry.access(req)->status, Equals("200"));
-            AssertThrows(std::exception, registry.access(req));
-            AssertThrows(std::exception, registry.access(req));
-            AssertThat(registry.access(req)->status, Equals("404"));
-            AssertThat(registry.access(req)->status, Equals("404"));
+            AssertThat(app.registry.access(req)->status, Equals("200"));
+            AssertThat(app.registry.access(req)->status, Equals("200"));
+            AssertThrows(std::exception, app.registry.access(req));
+            AssertThrows(std::exception, app.registry.access(req));
+            AssertThat(app.registry.access(req)->status, Equals("404"));
+            AssertThat(app.registry.access(req)->status, Equals("404"));
             
             AssertThat(s.count(), Equals(6));
         });

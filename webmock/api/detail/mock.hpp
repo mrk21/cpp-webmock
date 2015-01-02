@@ -1,7 +1,7 @@
 #ifndef WEBMOCK_API_DETAIL_MOCK_HPP
 #define WEBMOCK_API_DETAIL_MOCK_HPP
 
-#include <webmock/api/detail/registry.hpp>
+#include <webmock/api/detail/application.hpp>
 #include <webmock/api/condition.hpp>
 #include <initializer_list>
 
@@ -12,32 +12,32 @@ namespace webmock { namespace api { namespace detail {
         using condition_type = core::condition_list::condition_type;
         
         core::condition_list conditions_;
-        core::stub_registry & registry;
+        detail::application & app;
         
     public:
         mock_base(
-            core::stub_registry & registry = detail::registry()
+            detail::application & app = detail::app()
         ) :
-            registry(registry)
+            app(app)
         {}
         
         mock_base(
             with_url const & url,
-            core::stub_registry & registry = detail::registry()
+            detail::application & app = detail::app()
         ) :
-            conditions_({url}), registry(registry)
+            conditions_({url}), app(app)
         {}
         
         mock_base(
             with_method const & method,
             with_url const & url,
-            core::stub_registry & registry = detail::registry()
+            detail::application & app = detail::app()
         ) :
-            conditions_({method, url}), registry(registry)
+            conditions_({method, url}), app(app)
         {}
         
         std::size_t count() const {
-            return this->registry.count_requests(this->conditions_);
+            return this->app.registry.count_requests(this->conditions_);
         }
         
         operator std::size_t() const {

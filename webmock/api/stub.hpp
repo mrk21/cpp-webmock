@@ -13,26 +13,26 @@ inline namespace directive {
         
     public:
         a_stub(
-            core::stub_registry & registry = detail::registry()
+            detail::application & app = detail::app()
         ) :
-            mock_base(registry),
+            mock_base(app),
             data(this->init_data())
         {}
         
         a_stub(
             with_url const & url,
-            core::stub_registry & registry = detail::registry()
+            detail::application & app = detail::app()
         ) :
-            mock_base(url, registry),
+            mock_base(url, app),
             data(this->init_data())
         {}
         
         a_stub(
             with_method const & method,
             with_url const & url,
-            core::stub_registry & registry = detail::registry()
+            detail::application & app = detail::app()
         ) :
-            mock_base(method, url, registry),
+            mock_base(method, url, app),
             data(this->init_data())
         {}
         
@@ -62,7 +62,7 @@ inline namespace directive {
         
     private:
         core::stub & init_data() {
-            return this->registry.add({this->conditions_});
+            return this->app.registry.add({this->conditions_});
         }
     };
 }

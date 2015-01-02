@@ -8,7 +8,7 @@
 #include <webmock/adapter/cpp_netlib/support.hpp>
 #include <webmock/core/request.hpp>
 #include <webmock/core/response.hpp>
-#include <webmock/api/detail/registry.hpp>
+#include <webmock/api/detail/application.hpp>
 
 
 namespace boost { namespace network { namespace http { namespace impl {
@@ -42,6 +42,8 @@ namespace boost { namespace network { namespace http { namespace impl {
             body_callback_function_type callback,
             body_generator_function_type generator
         ) {
+            auto && app = webmock::api::detail::app();
+            
             webmock::core::request webmock_request;
             webmock_request.method = method;
             webmock_request.url = request.uri().string();
@@ -50,7 +52,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             }
             webmock_request.body = http::body(request);
             
-            if (auto && webmock_response = webmock::api::detail::registry().access(webmock_request)) {
+            if (auto && webmock_response = app.registry.access(webmock_request)) {
                 basic_response<Tag> response;
                 response
                     << http::status(webmock_response->status)
@@ -60,6 +62,10 @@ namespace boost { namespace network { namespace http { namespace impl {
                     response << network::header(header.first, header.second);
                 }
                 return response;
+            }
+            
+            if (app.config.stub_not_found_callback) {
+                app.config.stub_not_found_callback(webmock_request);
             }
             
             throw (std::ostringstream()
