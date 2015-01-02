@@ -32,6 +32,7 @@ go_bandit([]{
         after_each([&]{
             api::reset();
             api::stub_not_found_callback();
+            api::disallow_connecting_to_net();
         });
         
         it("should swap the implementation", [&]{
@@ -60,10 +61,11 @@ go_bandit([]{
         
         describe("when the stub satisfying the request not found", [&]{
             webmock::request const webmock_request{
-                "GET", "http://www.hogefuga.jp/path/to/bar.json", {
-                    {"Content-Type", "application/json"}
+                "GET", "http://www.boost.org", {
+                    {"Connection", "close"},
+                    {"Content-Type", "application/x-www-form-urlencoded"}
                 },
-                "{\"hoge\": 1}"
+                "a=1&b=2"
             };
             
             auto && access = [&]{
@@ -101,6 +103,13 @@ go_bandit([]{
                     
                     AssertThrows(std::logic_error, access());
                     AssertThat(LastException<std::logic_error>().what(), Equals("message"));
+                });
+            });
+            
+            describe("when the `is_connecting_to_net` option enabled", [&]{
+                it("should connect network", [&]{
+                    api::allow_connecting_to_net();
+                    AssertThat(static_cast<int>(http::status(access())), Equals(200));
                 });
             });
         });

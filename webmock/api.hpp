@@ -18,7 +18,15 @@ namespace webmock { namespace api {
     }
     
     inline void stub_not_found_callback(detail::application::stub_not_found_callback_type callback = nullptr) {
-        detail::app().config.stub_not_found_callback = callback;
+        detail::app().config.stub_not_found.callback = callback;
+    }
+    
+    inline void allow_connecting_to_net() {
+        detail::app().config.stub_not_found.is_connecting_to_net = true;
+    }
+    
+    inline void disallow_connecting_to_net() {
+        detail::app().config.stub_not_found.is_connecting_to_net = false;
     }
 }}
 

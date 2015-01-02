@@ -12,7 +12,10 @@ namespace webmock { namespace api { namespace detail {
         core::stub_registry registry;
         
         struct {
-            stub_not_found_callback_type stub_not_found_callback;
+            struct {
+                stub_not_found_callback_type callback;
+                bool is_connecting_to_net = false;
+            } stub_not_found;
         } config;
     };
     
