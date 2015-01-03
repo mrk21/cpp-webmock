@@ -1,21 +1,20 @@
 #ifndef WEBMOCK_CORE_HTTP_HPP
 #define WEBMOCK_CORE_HTTP_HPP
 
-#include <webmock/core/ci_value_base.hpp>
-#include <webmock/core/uri_parser.hpp>
-#include <string>
+#include <iostream>
 #include <vector>
 #include <map>
 #include <cctype>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/optional.hpp>
-#include <iostream>
+#include <webmock/util/ci_value_base.hpp>
+#include <webmock/util/uri_parser.hpp>
 
 namespace webmock { namespace core { namespace http {
-    struct method: public ci_value_base<method> {
-        using ci_value_base<method>::ci_value_base;
-        using ci_value_base<method>::operator =;
+    struct method: public util::ci_value_base<method> {
+        using util::ci_value_base<method>::ci_value_base;
+        using util::ci_value_base<method>::operator =;
         
         operator std::string() const {
             std::string result;
@@ -26,9 +25,9 @@ namespace webmock { namespace core { namespace http {
         }
     };
     
-    struct header_name: public ci_value_base<header_name> {
-        using ci_value_base<header_name>::ci_value_base;
-        using ci_value_base<header_name>::operator =;
+    struct header_name: public util::ci_value_base<header_name> {
+        using util::ci_value_base<header_name>::ci_value_base;
+        using util::ci_value_base<header_name>::operator =;
         
         operator std::string() const {
             std::vector<ci_string> list;
@@ -45,9 +44,9 @@ namespace webmock { namespace core { namespace http {
     };
     using headers = std::multimap<header_name, std::string>;
     
-    struct status: public ci_value_base<status> {
-        using ci_value_base<status>::ci_value_base;
-        using ci_value_base<status>::operator =;
+    struct status: public util::ci_value_base<status> {
+        using util::ci_value_base<status>::ci_value_base;
+        using util::ci_value_base<status>::operator =;
         
         status() : ci_value_base("200") {}
         status(unsigned int v) : ci_value_base(boost::lexical_cast<std::string>(v)) {}
@@ -61,9 +60,9 @@ namespace webmock { namespace core { namespace http {
         boost::equality_comparable<url, url>,
         boost::less_than_comparable<url, url>
     {
-        struct ci_component: public ci_value_base<ci_component> {
-            using ci_value_base<ci_component>::ci_value_base;
-            using ci_value_base<ci_component>::operator =;
+        struct ci_component: public util::ci_value_base<ci_component> {
+            using util::ci_value_base<ci_component>::ci_value_base;
+            using util::ci_value_base<ci_component>::operator =;
             
             operator std::string() const {
                 std::string result;
@@ -89,7 +88,7 @@ namespace webmock { namespace core { namespace http {
         url() = default;
         url(char const * value) : url(std::string(value)) {}
         url(std::string const & value) {
-            uri_parser result(value);
+            util::uri_parser result(value);
             
             this->host = result.host;
             this->path = result.path.empty() ? "/" : result.path;

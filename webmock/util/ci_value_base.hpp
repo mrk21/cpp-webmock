@@ -1,11 +1,11 @@
-#ifndef WEBMOCK_CORE_CI_VALUE_BASE_HPP
-#define WEBMOCK_CORE_CI_VALUE_BASE_HPP
+#ifndef WEBMOCK_UTIL_CI_VALUE_BASE_HPP
+#define WEBMOCK_UTIL_CI_VALUE_BASE_HPP
 
 #include <string>
 #include <cctype>
 #include <boost/operators.hpp>
 
-namespace webmock { namespace core {
+namespace webmock { namespace util {
     template <typename Derived>
     class ci_value_base:
         boost::equality_comparable<Derived, Derived>,

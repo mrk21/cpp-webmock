@@ -1,15 +1,13 @@
-#ifndef WEBMOCK_CORE_URI_PARSER_HPP
-#define WEBMOCK_CORE_URI_PARSER_HPP
+#ifndef WEBMOCK_UTIL_URI_PARSER_HPP
+#define WEBMOCK_UTIL_URI_PARSER_HPP
 
 #include <iostream>
 #include <regex>
-#include <initializer_list>
 #include <map>
 #include <tuple>
 #include <boost/operators.hpp>
-#include <webmock/core/ci_value_base.hpp>
 
-namespace webmock { namespace core {
+namespace webmock { namespace util {
     // Simple URI Parser
     // see: RFC3986(http://www.ietf.org/rfc/rfc3986.txt)
     struct uri_parser: boost::equality_comparable<uri_parser, uri_parser> {

@@ -1,11 +1,11 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/core/uri_parser.hpp>
+#include <webmock/util/uri_parser.hpp>
 
-namespace webmock { namespace core {
+namespace webmock { namespace util {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::core::uri_parser", []{
+    describe("webmock::util::uri_parser", []{
         it("should parse", [&]{
             AssertThat(
                 uri_parser("http://www.boost.org/path/to/url?a=1&b=2#aa"),

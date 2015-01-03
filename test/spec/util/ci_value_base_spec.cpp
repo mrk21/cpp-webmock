@@ -1,12 +1,12 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <webmock/core/ci_value_base.hpp>
+#include <webmock/util/ci_value_base.hpp>
 #include <sstream>
 
-namespace webmock { namespace core {
+namespace webmock { namespace util {
 go_bandit([]{
     using namespace bandit;
     
-    describe("webmock::core::ci_value_base", []{
+    describe("webmock::util::ci_value_base", []{
         describe("operators", [&]{
             it("should pass", [&]{
                 struct val: public ci_value_base<val> {
