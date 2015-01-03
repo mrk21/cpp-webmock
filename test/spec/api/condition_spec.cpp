@@ -34,7 +34,7 @@ go_bandit([]{
         
         describe("with_url(value)", [&]{
             it("should be true", [&]{
-                AssertThat(with_url("http://www.foobar.com/path/to/resource")(req), Equals(true));
+                AssertThat(with_url("HTTP://WWW.FOOBAR.COM:80/path/to/resource?#")(req), Equals(true));
                 AssertThat(with_url(std::regex("http://www.foobar.com/.*"))(req), Equals(true));
             });
         });

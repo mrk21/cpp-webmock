@@ -34,6 +34,22 @@ go_bandit([]{
                 });
             });
         });
+        
+        describe("::url", [&]{
+            it("should consider to equal an URL that is a different form and is same meaning", [&]{
+                AssertThat(
+                    url("HTTP://WWW.BOOST.ORG?a=1&a=2&b=3"),
+                    Equals("http://www.boost.org:80/?b=3&a=2#")
+                );
+            });
+            
+            it("should convert `std::string` and normalize", [&]{
+                AssertThat(
+                    static_cast<std::string>(url("HTTP://WWW.BOOST.ORG:8080?a=1&a=2&b=3")),
+                    Equals("http://www.boost.org:8080/?a=2&b=3")
+                );
+            });
+        });
     });
 });
 }}}

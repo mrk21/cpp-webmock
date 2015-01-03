@@ -9,7 +9,7 @@
 
 namespace webmock { namespace api { namespace detail {
     template <typename T>
-    class matcher: boost::equality_comparable<matcher<T>, std::string> {
+    class matcher: boost::equality_comparable<matcher<T>, T> {
     public:
         using value_type = T;
         

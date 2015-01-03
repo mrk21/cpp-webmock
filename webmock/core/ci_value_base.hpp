@@ -40,16 +40,26 @@ namespace webmock { namespace core {
         ci_value_base(std::string const & v) : data(v.c_str()) {}
         ci_value_base(char const * v) : data(v) {}
         
+        ci_value_base & operator =(char const * rop) {
+            this->data = rop;
+            return *this;
+        }
+        
+        ci_value_base & operator =(std::string const & rop) {
+            this->data = rop.c_str();
+            return *this;
+        }
+        
         operator std::string() const {
             return this->data.c_str();
         }
         
-        friend bool operator ==(Derived const & rop, Derived const & lop) {
-            return rop.data == lop.data;
+        friend bool operator ==(Derived const & lop, Derived const & rop) {
+            return lop.data == rop.data;
         }
         
-        friend bool operator <(Derived const & rop, Derived const & lop) {
-            return rop.data < lop.data;
+        friend bool operator <(Derived const & lop, Derived const & rop) {
+            return lop.data < rop.data;
         }
         
         friend std::ostream & operator <<(std::ostream & lop, Derived const & rop) {
