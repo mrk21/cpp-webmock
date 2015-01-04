@@ -41,11 +41,31 @@ go_bandit([]{
                     url("HTTP://WWW.BOOST.ORG?a=1&a=2&b=3"),
                     Equals("http://www.boost.org:80/?b=3&a=2#")
                 );
+                
+                AssertThat(
+                    url("http://www.boost.org/a/b//c"),
+                    Equals("http://www.boost.org/a/b/c")
+                );
+                
+                AssertThat(
+                    url("http://www.boost.org/a/b/./c"),
+                    Equals("http://www.boost.org/a/b/c")
+                );
+                
+                AssertThat(
+                    url("http://www.boost.org/a/b/../c"),
+                    Equals("http://www.boost.org/a/c")
+                );
+                
+                AssertThat(
+                    url("http://www.boost.org/a/b/../../../c"),
+                    Equals("http://www.boost.org/c")
+                );
             });
             
             it("should convert `std::string` and normalize", [&]{
                 AssertThat(
-                    static_cast<std::string>(url("HTTP://WWW.BOOST.ORG:8080?a=1&a=2&b=3")),
+                    static_cast<std::string>(url("HTTP://WWW.BOOST.ORG:8080/../../?a=1&a=2&b=3")),
                     Equals("http://www.boost.org:8080/?a=2&b=3")
                 );
             });

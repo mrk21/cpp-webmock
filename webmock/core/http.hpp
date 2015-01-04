@@ -74,9 +74,10 @@ namespace webmock { namespace core { namespace http {
         };
         
         using query_type = std::map<std::string, boost::optional<std::string>>;
+        using path_component_type = std::vector<std::string>;
         
         ci_component host;
-        std::string path;
+        path_component_type path_components;
         query_type query;
         
         boost::optional<ci_component> scheme;
@@ -91,7 +92,22 @@ namespace webmock { namespace core { namespace http {
             util::uri_parser result(value);
             
             this->host = result.host;
-            this->path = result.path.empty() ? "/" : result.path;
+            
+            path_component_type path_components;
+            boost::split(path_components, result.path, boost::is_any_of("/"));
+            for (auto & component: path_components) {
+                if (component.empty() || component == ".") {
+                    continue;
+                }
+                else if (component == "..") {
+                    if (!this->path_components.empty()) {
+                       this->path_components.pop_back();
+                    }
+                }
+                else {
+                    this->path_components.push_back(component);
+                }
+            }
             
             if (!result.query.empty()) {
                 std::vector<std::string> param_entries;
@@ -128,7 +144,7 @@ namespace webmock { namespace core { namespace http {
             oss << this->host;
             if (this->port && !this->is_default_port) oss << ":" << *this->port;
             
-            oss << this->path;
+            oss << "/" << boost::join(this->path_components, "/");
             
             if (!this->query.empty()) {
                 std::vector<std::string> param_entries;
