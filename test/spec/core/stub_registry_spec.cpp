@@ -1,6 +1,9 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
 #include <webmock/core/stub_registry.hpp>
 #include <memory>
+#include <thread>
+#include <boost/lexical_cast.hpp>
+#include <boost/optional.hpp>
 
 namespace webmock { namespace core {
 go_bandit([]{
@@ -42,8 +45,58 @@ go_bandit([]{
                         Equals(true));
                 });
             });
+            
+            describe("multithreading", [&]{
+                std::size_t const thread_size = 30;
+                std::size_t const trial_count = 10;
+                
+                it("should be thread-safe", [&]{
+                    for (uint32_t tc = 0; tc < trial_count; ++tc) {
+                        // setting responses
+                        registry->reset();
+                        auto && target = registry->add({{
+                            [&url](auto && req){ return req.url == url; }
+                        }});
+                        for (uint32_t i=0; i < thread_size; ++i) {
+                            target.add_sequence({1, [i](auto &&){
+                                return response{"200", boost::lexical_cast<std::string>(i)};
+                            }});
+                        }
+                        
+                        // calling by some thread
+                        std::vector<int> responses;
+                        std::mutex push_mutex;
+                        auto && push = [&](auto && v){
+                            std::lock_guard<std::mutex> lock(push_mutex);
+                            responses.push_back(boost::lexical_cast<int>(v));
+                        };
+                        
+                        std::vector<std::thread> threads;
+                        for (uint32_t i=0; i < thread_size; ++i) {
+                            threads.push_back(std::thread([&]{
+                                auto && res = registry->access({"GET", url});
+                                push(res->body);
+                            }));
+                        }
+                        for (auto && t: threads) t.join();
+                        
+                        // asserting
+                        boost::optional<int> prev;
+                        for (auto && v: responses) {
+                            if (prev) {
+                                AssertThat(v, Equals(*prev + 1));
+                                prev = v;
+                            }
+                            else {
+                                prev = v;
+                                AssertThat(v, Equals(0));
+                            }
+                        }
+                    }
+                });
+            });
         });
-
+        
         describe("#count_requests(conditions)", [&]{
             it("should be a number of requests matched to the conditions in this history", [&]{
                 registry->access({"GET", url});

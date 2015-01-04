@@ -7,6 +7,7 @@
 #include <webmock/core/condition_list.hpp>
 #include <vector>
 #include <deque>
+#include <thread>
 #include <boost/optional.hpp>
 #include <boost/range/algorithm.hpp>
 
@@ -14,6 +15,7 @@ namespace webmock { namespace core {
     class stub_registry {
         std::deque<stub> stubs;
         std::vector<request> request_history;
+        std::mutex access_mutex;
         
     public:
         stub & add(core::stub const & stub) {
@@ -27,6 +29,8 @@ namespace webmock { namespace core {
         }
         
         boost::optional<response> access(core::request const & request) {
+            std::lock_guard<std::mutex> lock(access_mutex);
+            
             this->request_history.push_back(request);
             for (auto && stub: this->stubs) {
                 if (stub.match(request)) return stub.get_response(request);
