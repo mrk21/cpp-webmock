@@ -97,9 +97,14 @@ go_bandit([]{
             });
             
             it("should convert `std::string` and normalize", [&]{
+                url target("HTTP://WWW.BOOST.ORG:8080/../../ a%20あ?a=1&a=2&b=3");
                 AssertThat(
-                    static_cast<std::string>(url("HTTP://WWW.BOOST.ORG:8080/../../?a=1&a=2&b=3")),
-                    Equals("http://www.boost.org:8080/?a=2&b=3")
+                    static_cast<std::string>(target),
+                    Equals("http://www.boost.org:8080/ a あ?a=2&b=3")
+                );
+                AssertThat(
+                    boost::lexical_cast<std::string>(target),
+                    Equals("http://www.boost.org:8080/%20a%20%E3%81%82?a=2&b=3")
                 );
             });
         });

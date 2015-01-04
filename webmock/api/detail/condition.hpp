@@ -40,7 +40,7 @@ namespace webmock { namespace api { namespace detail {
     template <typename T, T core::request::*Attribute>
     class with_attribute {
         matcher<T> match;
-    
+        
     public:
         template <typename ExpectedType>
         with_attribute(ExpectedType const & value) : match(value) {}
