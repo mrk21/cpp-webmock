@@ -63,6 +63,39 @@ go_bandit([]{
                 );
             });
             
+            describe("when the scheme was none", [&]{
+                it("should match the any scheme", [&]{
+                    AssertThat(
+                        url("//www.boost.org:8080"),
+                        Equals("http://www.boost.org:8080")
+                    );
+                    
+                    AssertThat(
+                        url("//www.boost.org:8080"),
+                        Equals("//www.boost.org:8080")
+                    );
+                    
+                    AssertThat(
+                        url("//www.boost.org:8080"),
+                        not Equals("http://www.boost.org")
+                    );
+                });
+                
+                describe("when the port was none", [&]{
+                    it("should match the any scheme", [&]{
+                        AssertThat(
+                            url("//www.boost.org"),
+                            Equals("https://www.boost.org:8080")
+                        );
+                        
+                        AssertThat(
+                            url("//www.boost.org"),
+                            Equals("//www.boost.org:8080")
+                        );
+                    });
+                });
+            });
+            
             it("should convert `std::string` and normalize", [&]{
                 AssertThat(
                     static_cast<std::string>(url("HTTP://WWW.BOOST.ORG:8080/../../?a=1&a=2&b=3")),

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <tuple>
 #include <cctype>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
@@ -73,17 +74,16 @@ namespace webmock { namespace core { namespace http {
             }
         };
         
+        using port_type = uint16_t;
+        using path_type = std::vector<std::string>;
         using query_type = std::map<std::string, boost::optional<std::string>>;
-        using path_component_type = std::vector<std::string>;
-        
-        ci_component host;
-        path_component_type path_components;
-        query_type query;
         
         boost::optional<ci_component> scheme;
         boost::optional<std::string> userinfo;
-        boost::optional<uint16_t> port;
-        bool is_default_port = false;
+        boost::optional<ci_component> host;
+        boost::optional<port_type> port;
+        path_type path;
+        boost::optional<query_type> query;
         
     public:
         url() = default;
@@ -91,89 +91,97 @@ namespace webmock { namespace core { namespace http {
         url(std::string const & value) {
             util::uri_parser result(value);
             
-            this->host = result.host;
+            if (!result.scheme.empty()) this->scheme = result.scheme;
+            if (!result.userinfo.empty()) this->userinfo = result.userinfo;
+            if (!result.host.empty()) this->host = result.host;
+            if (!result.port.empty()) this->port = boost::lexical_cast<port_type>(result.port);
+            if (!this->port) this->port = this->default_port();
             
-            path_component_type path_components;
+            path_type path_components;
             boost::split(path_components, result.path, boost::is_any_of("/"));
             for (auto & component: path_components) {
                 if (component.empty() || component == ".") {
                     continue;
                 }
                 else if (component == "..") {
-                    if (!this->path_components.empty()) {
-                       this->path_components.pop_back();
+                    if (!this->path.empty()) {
+                       this->path.pop_back();
                     }
                 }
                 else {
-                    this->path_components.push_back(component);
+                    this->path.push_back(component);
                 }
             }
             
             if (!result.query.empty()) {
-                std::vector<std::string> param_entries;
-                boost::split(param_entries, result.query, boost::is_any_of("&"));
-                for (auto && param_entry: param_entries) {
-                    std::vector<std::string> param;
-                    boost::split(param, param_entry, boost::is_any_of("="));
-                    if (param.size() == 1) this->query[param[0]] = boost::none;
-                    else                   this->query[param[0]] = param[1];
+                this->query = query_type{};
+                std::vector<std::string> params;
+                boost::split(params, result.query, boost::is_any_of("&"));
+                for (auto && param: params) {
+                    std::vector<std::string> param_pair;
+                    boost::split(param_pair, param, boost::is_any_of("="));
+                    if (param_pair.size() == 1) (*this->query)[param_pair[0]] = boost::none;
+                    else                        (*this->query)[param_pair[0]] = param_pair[1];
                 }
-            }
-            
-            if (!result.scheme.empty()) this->scheme = result.scheme;
-            if (!result.userinfo.empty()) this->userinfo = result.userinfo;
-            if (!result.port.empty()) this->port = boost::lexical_cast<uint16_t>(result.port);
-            
-            if (this->scheme) {
-                if (!this->port) {
-                    if      (*this->scheme == "http" ) this->port = 80;
-                    else if (*this->scheme == "https") this->port = 443;
-                }
-                this->is_default_port =
-                    (*this->scheme == "http"  && *this->port == 80 ) ||
-                    (*this->scheme == "https" && *this->port == 443);
             }
         }
         
         operator std::string() const {
             std::ostringstream oss;
+            
             if (this->scheme) oss << *this->scheme << ":";
+            if (this->host) {
+                oss << "//";
+                if (this->userinfo) oss << *this->userinfo << "@";
+                oss << *this->host;
+                if (this->port != this->default_port()) oss << ":" << *this->port;
+            }
+            oss << "/" << boost::join(this->path, "/");
             
-            oss << "//";
-            if (this->userinfo) oss << *this->userinfo << "@";
-            oss << this->host;
-            if (this->port && !this->is_default_port) oss << ":" << *this->port;
-            
-            oss << "/" << boost::join(this->path_components, "/");
-            
-            if (!this->query.empty()) {
-                std::vector<std::string> param_entries;
-                for (auto && param: this->query) {
-                    if (param.second) {
-                        param_entries.push_back(param.first +"="+ *param.second);
+            if (this->query) {
+                std::vector<std::string> params;
+                for (auto && param_pair: *this->query) {
+                    if (param_pair.second) {
+                        params.push_back(param_pair.first +"="+ *param_pair.second);
                     }
                     else {
-                        param_entries.push_back(param.first);
+                        params.push_back(param_pair.first);
                     }
                 }
-                oss << "?" << boost::join(param_entries, "&");
+                oss << "?" << boost::join(params, "&");
             }
             
             return oss.str();
         }
         
         friend bool operator ==(url const & lop, url const & rop) {
-            return static_cast<std::string>(lop)
-                == static_cast<std::string>(rop);
+            bool result =
+                std::tie(lop.userinfo, lop.host, lop.path, lop.query) ==
+                std::tie(rop.userinfo, rop.host, rop.path, rop.query);
+            
+            if (!lop.scheme || !rop.scheme) {
+                if (!lop.port || !rop.port) return result;
+                return result && (lop.port == rop.port);
+            }
+            return result && (
+                std::tie(lop.scheme, lop.port) ==
+                std::tie(rop.scheme, rop.port)
+            );
         }
         
         friend bool operator <(url const & lop, url const & rop) {
-            return static_cast<std::string>(lop)
-                 < static_cast<std::string>(rop);
+            return static_cast<std::string>(lop) < static_cast<std::string>(rop);
         }
         
         friend std::ostream & operator <<(std::ostream & lop, url const & rop) {
             return lop << static_cast<std::string>(rop);
+        }
+        
+    private:
+        boost::optional<port_type> default_port() const {
+            if (this->scheme == ci_component("http")) return 80;
+            if (this->scheme == ci_component("https")) return 443;
+            return boost::none;
         }
     };
 }}}
