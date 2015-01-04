@@ -82,7 +82,7 @@ go_bandit([]{
                 });
                 
                 describe("when the port was none", [&]{
-                    it("should match the any scheme", [&]{
+                    it("should match the any port", [&]{
                         AssertThat(
                             url("//www.boost.org"),
                             Equals("https://www.boost.org:8080")

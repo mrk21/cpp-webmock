@@ -99,7 +99,7 @@ namespace webmock { namespace core { namespace http {
             
             path_type path_components;
             boost::split(path_components, result.path, boost::is_any_of("/"));
-            for (auto & component: path_components) {
+            for (auto && component: path_components) {
                 if (component.empty() || component == ".") {
                     continue;
                 }
