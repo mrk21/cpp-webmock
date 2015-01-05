@@ -7,7 +7,7 @@ go_bandit([]{
     
     describe("webmock::api::stub", []{
         it("should build", [&]{
-            detail::application app;
+            application app;
             
             a_stub{"http://www.hogebar.jp/", app}
                 .conditions(

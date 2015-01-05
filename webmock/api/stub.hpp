@@ -13,7 +13,7 @@ inline namespace directive {
         
     public:
         a_stub(
-            detail::application & app = detail::app()
+            application & app = api::app()
         ) :
             mock_base(app),
             data(this->init_data())
@@ -21,7 +21,7 @@ inline namespace directive {
         
         a_stub(
             with_url const & url,
-            detail::application & app = detail::app()
+            application & app = api::app()
         ) :
             mock_base(url, app),
             data(this->init_data())
@@ -30,7 +30,7 @@ inline namespace directive {
         a_stub(
             with_method const & method,
             with_url const & url,
-            detail::application & app = detail::app()
+            application & app = api::app()
         ) :
             mock_base(method, url, app),
             data(this->init_data())

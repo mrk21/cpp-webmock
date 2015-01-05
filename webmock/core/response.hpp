@@ -10,7 +10,7 @@
 namespace webmock { namespace core {
     struct response {
         http::status status;
-        std::string body;
+        http::body body;
         http::headers headers;
     };
     

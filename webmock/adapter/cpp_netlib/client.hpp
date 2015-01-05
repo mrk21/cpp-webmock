@@ -8,7 +8,7 @@
 #include <webmock/adapter/cpp_netlib/support.hpp>
 #include <webmock/core/request.hpp>
 #include <webmock/core/response.hpp>
-#include <webmock/api/detail/application.hpp>
+#include <webmock/api/application.hpp>
 
 namespace boost { namespace network { namespace http { namespace impl {
     template <class Tag, unsigned version_major, unsigned version_minor>
@@ -63,7 +63,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             body_callback_function_type callback,
             body_generator_function_type generator
         ) {
-            auto && app = webmock::api::detail::app();
+            auto && app = webmock::api::app();
             
             webmock::core::request webmock_request;
             webmock_request.method = method;

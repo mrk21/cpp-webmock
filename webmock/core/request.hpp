@@ -12,7 +12,7 @@ namespace webmock { namespace core {
         http::method method;
         http::url url;
         http::headers headers;
-        std::string body;
+        http::body body;
     };
     
     inline bool operator ==(request const & lop, request const & rop) {

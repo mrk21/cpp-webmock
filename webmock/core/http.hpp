@@ -45,7 +45,8 @@ namespace webmock { namespace core { namespace http {
             return boost::join(list, "-").c_str();
         }
     };
-    using headers = std::multimap<header_name, std::string>;
+    using header_value = std::string;
+    using headers = std::multimap<header_name, header_value>;
     
     struct status: public util::ci_value_base<status> {
         using util::ci_value_base<status>::ci_value_base;
@@ -250,6 +251,8 @@ namespace webmock { namespace core { namespace http {
             return oss.str();
         }
     };
+    
+    using body = std::string;
 }}}
 
 #endif
