@@ -67,7 +67,7 @@ namespace boost { namespace network { namespace http { namespace impl {
             
             webmock::core::request webmock_request;
             webmock_request.method = method;
-            webmock_request.url = request.uri().string();
+            webmock_request.url.set_encoded(request.uri().string());
             for (auto && header: http::headers(request)) {
                 webmock_request.headers.insert(header);
             }

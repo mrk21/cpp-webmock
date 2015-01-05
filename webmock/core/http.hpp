@@ -89,10 +89,19 @@ namespace webmock { namespace core { namespace http {
             }
         };
         
-        struct percent_encoding_policy {
+        struct encode_policy {
             template <typename T>
             std::string operator ()(T const & value) {
                 return util::percent_encoding::encode(
+                    boost::lexical_cast<std::string>(value)
+                );
+            }
+        };
+        
+        struct decode_policy {
+            template <typename T>
+            std::string operator ()(T const & value) {
+                return util::percent_encoding::decode(
                     boost::lexical_cast<std::string>(value)
                 );
             }
@@ -107,45 +116,18 @@ namespace webmock { namespace core { namespace http {
         
     public:
         url() = default;
-        url(char const * url_str) : url(std::string(url_str)) {}
-        url(std::string const & url_str) {
-            using pe = util::percent_encoding;
-            util::uri_parser uri(url_str);
-            
-            if (!uri.scheme.empty()) this->scheme = pe::decode(uri.scheme);
-            if (!uri.userinfo.empty()) this->userinfo = pe::decode(uri.userinfo);
-            if (!uri.host.empty()) this->host = pe::decode(uri.host);
-            if (!uri.port.empty()) this->port = boost::lexical_cast<port_type>(pe::decode(uri.port));
-            else                   this->port = this->default_port();
-            {
-                path_type path;
-                boost::split(path, uri.path, boost::is_any_of("/"));
-                for (auto && component: path) {
-                    if (component.empty() || component == ".") {
-                        continue;
-                    }
-                    else if (component == "..") {
-                        if (!this->path.empty()) {
-                           this->path.pop_back();
-                        }
-                    }
-                    else {
-                        this->path.push_back(pe::decode(component));
-                    }
-                }
-            }
-            if (!uri.query.empty()) {
-                this->query = query_type{};
-                std::vector<std::string> params;
-                boost::split(params, uri.query, boost::is_any_of("&"));
-                for (auto && param: params) {
-                    std::vector<std::string> param_pair;
-                    boost::split(param_pair, param, boost::is_any_of("="));
-                    auto && key = pe::decode(param_pair[0]);
-                    if (param_pair.size() == 1) (*this->query)[key] = boost::none;
-                    else                        (*this->query)[key] = pe::decode(param_pair[1]);
-                }
-            }
+        
+        url(char const * url_str, bool is_encoded = false) :
+            url(std::string(url_str), is_encoded)
+        {}
+        
+        url(std::string const & url_str, bool is_encoded = false) {
+            if (is_encoded) this->form_string<decode_policy>(url_str);
+            else this->form_string<non_encoding_policy>(url_str);
+        }
+        
+        url & set_encoded(std::string const & url_str) {
+            return this->form_string<decode_policy>(url_str);
         }
         
         operator std::string() const {
@@ -174,7 +156,7 @@ namespace webmock { namespace core { namespace http {
         }
         
         friend std::ostream & operator <<(std::ostream & lop, url const & rop) {
-            return lop << rop.to_string<percent_encoding_policy>();
+            return lop << rop.to_string<encode_policy>();
         }
         
     private:
@@ -184,31 +166,83 @@ namespace webmock { namespace core { namespace http {
             return boost::none;
         }
         
+        void reset() {
+            this->scheme = boost::none;
+            this->userinfo = boost::none;
+            this->host = boost::none;
+            this->port = boost::none;
+            this->path.clear();
+            this->query = boost::none;
+        }
+        
+        template <typename EncodingPolicy>
+        url & form_string(std::string const & url_str) {
+            EncodingPolicy encoding;
+            util::uri_parser uri(url_str);
+            this->reset();
+            
+            if (!uri.scheme.empty()) this->scheme = encoding(uri.scheme);
+            if (!uri.userinfo.empty()) this->userinfo = encoding(uri.userinfo);
+            if (!uri.host.empty()) this->host = encoding(uri.host);
+            if (!uri.port.empty()) this->port = boost::lexical_cast<port_type>(encoding(uri.port));
+            else                   this->port = this->default_port();
+            {
+                path_type path;
+                boost::split(path, uri.path, boost::is_any_of("/"));
+                for (auto && component: path) {
+                    if (component.empty() || component == ".") {
+                        continue;
+                    }
+                    else if (component == "..") {
+                        if (!this->path.empty()) {
+                           this->path.pop_back();
+                        }
+                    }
+                    else {
+                        this->path.push_back(encoding(component));
+                    }
+                }
+            }
+            if (!uri.query.empty()) {
+                this->query = query_type{};
+                std::vector<std::string> params;
+                boost::split(params, uri.query, boost::is_any_of("&"));
+                for (auto && param: params) {
+                    std::vector<std::string> param_pair;
+                    boost::split(param_pair, param, boost::is_any_of("="));
+                    auto && key = encoding(param_pair[0]);
+                    if (param_pair.size() == 1) (*this->query)[key] = boost::none;
+                    else                        (*this->query)[key] = encoding(param_pair[1]);
+                }
+            }
+            return *this;
+        }
+        
         template <typename EncodingPolicy>
         std::string to_string() const {
+            EncodingPolicy encoding;
             std::ostringstream oss;
-            EncodingPolicy encode;
             
-            if (this->scheme) oss << encode(*this->scheme) << ":";
+            if (this->scheme) oss << encoding(*this->scheme) << ":";
             if (this->host) {
                 oss << "//";
-                if (this->userinfo) oss << encode(*this->userinfo) << "@";
-                oss << encode(*this->host);
-                if (this->port != this->default_port()) oss << ":" << encode(*this->port);
+                if (this->userinfo) oss << encoding(*this->userinfo) << "@";
+                oss << encoding(*this->host);
+                if (this->port != this->default_port()) oss << ":" << encoding(*this->port);
             }
             {
-                path_type encoded(this->path.size());
-                boost::transform(this->path, encoded.begin(), encode);
-                oss << "/" << boost::join(encoded, "/");
+                path_type processed_path(this->path.size());
+                boost::transform(this->path, processed_path.begin(), encoding);
+                oss << "/" << boost::join(processed_path, "/");
             }
             if (this->query) {
                 std::vector<std::string> params;
                 for (auto && param_pair: *this->query) {
                     if (param_pair.second) {
-                        params.push_back(encode(param_pair.first) +"="+ encode(*param_pair.second));
+                        params.push_back(encoding(param_pair.first) +"="+ encoding(*param_pair.second));
                     }
                     else {
-                        params.push_back(encode(param_pair.first));
+                        params.push_back(encoding(param_pair.first));
                     }
                 }
                 oss << "?" << boost::join(params, "&");

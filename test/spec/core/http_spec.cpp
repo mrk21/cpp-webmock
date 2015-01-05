@@ -97,7 +97,7 @@ go_bandit([]{
             });
             
             it("should convert `std::string` and normalize", [&]{
-                url target("HTTP://WWW.BOOST.ORG:8080/../../ a%20あ?a=1&a=2&b=3");
+                url target("HTTP://WWW.BOOST.ORG:8080/../../ a%20あ?a=1&a=2&b=3", true);
                 AssertThat(
                     static_cast<std::string>(target),
                     Equals("http://www.boost.org:8080/ a あ?a=2&b=3")
