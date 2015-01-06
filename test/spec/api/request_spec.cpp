@@ -8,7 +8,7 @@ go_bandit([]{
     describe("webmock::api::request", []{
         describe("#count()", [&]{
             it("should be a number of an access matched by this conditions", [&]{
-                detail::application app;
+                application app;
                 app.registry.access({"GET", "http://www.hogefuga.com/1"});
                 app.registry.access({"PUT", "http://www.hogefuga.com/2"});
                 app.registry.access({"GET", "http://www.hogefuga.jp/3"});
@@ -24,7 +24,7 @@ go_bandit([]{
         
         describe("#operator <<(condition_type rop)", [&]{
             it("should add the condition_type", [&]{
-                detail::application app;
+                application app;
                 app.registry.access({"POST", "http://www.hogebar.com/"});
                 app.registry.access({"POST", "http://www.hogebar.com/", {
                     {"Content-Type", "application/json"}

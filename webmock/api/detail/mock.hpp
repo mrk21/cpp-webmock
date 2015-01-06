@@ -1,7 +1,7 @@
 #ifndef WEBMOCK_API_DETAIL_MOCK_HPP
 #define WEBMOCK_API_DETAIL_MOCK_HPP
 
-#include <webmock/api/detail/application.hpp>
+#include <webmock/api/application.hpp>
 #include <webmock/api/condition.hpp>
 #include <initializer_list>
 
@@ -12,18 +12,18 @@ namespace webmock { namespace api { namespace detail {
         using condition_type = core::condition_list::condition_type;
         
         core::condition_list conditions_;
-        detail::application & app;
+        application & app;
         
     public:
         mock_base(
-            detail::application & app = detail::app()
+            application & app = api::app()
         ) :
             app(app)
         {}
         
         mock_base(
             with_url const & url,
-            detail::application & app = detail::app()
+            application & app = api::app()
         ) :
             conditions_({url}), app(app)
         {}
@@ -31,7 +31,7 @@ namespace webmock { namespace api { namespace detail {
         mock_base(
             with_method const & method,
             with_url const & url,
-            detail::application & app = detail::app()
+            application & app = api::app()
         ) :
             conditions_({method, url}), app(app)
         {}
