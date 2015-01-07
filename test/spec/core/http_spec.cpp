@@ -1,5 +1,6 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
 #include <webmock/core/http.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace webmock { namespace core { namespace http {
 go_bandit([]{

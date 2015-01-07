@@ -43,7 +43,20 @@ set(cpp-webmock_LIBRARIES
   cppnetlib-uri
   cppnetlib-client-connections
 )
+option(USE_LIBRARY "Use library" ON)
 
 enable_testing()
+
+if(USE_LIBRARY)
+  list(APPEND CMAKE_CXX_SOURCE_FILE_EXTENSIONS ipp)
+  include_regular_expression("^[^.]+$|[.]h$|[.]icc$|[.]hxx$|[.]hpp$")
+  
+  add_definitions(-DWEBMOCK_USE_LIBRARY)
+  link_directories(${PROJECT_SOURCE_DIR}/webmock)
+  list(APPEND cpp-webmock_LIBRARIES webmock)
+  
+  add_subdirectory(webmock)
+endif()
+
 add_subdirectory(examples)
 add_subdirectory(test)

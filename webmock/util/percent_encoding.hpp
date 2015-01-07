@@ -1,6 +1,7 @@
 #ifndef WEBMOCK_UTIL_PERCENT_ENCODING_HPP
 #define WEBMOCK_UTIL_PERCENT_ENCODING_HPP
 
+#include <iomanip>
 #include <string>
 #include <sstream>
 #include <boost/format.hpp>
