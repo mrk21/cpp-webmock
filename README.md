@@ -133,6 +133,32 @@ target_link_libraries(bin ${libs})
 
 ## Reference
 
+* [webmock::request](#webmockrequest)
+* [webmock::response](#webmockresponse)
+* [webmock::api::a\_stub](#webmockapia_stub)
+    * [constructor](#constructor)
+    * [returns()](#returns)
+    * [conditions()](#conditions)
+    * [operator &lt;&lt;](#operator-)
+    * [count()](#count)
+    * [operator std::size\_t](#operator-stdsize_t)
+* [webmock::api::a\_request](#webmockapia_request)
+* [webmock::api::a\_response](#webmockapia_response)
+* [webmock::api::an\_error](#webmockapian_error)
+* [webmock::api::with\_method](#webmockapiwith_method)
+* [webmock::api::with\_url](#webmockapiwith_url)
+* [webmock::api::with\_body](#webmockapiwith_body)
+* [webmock::api::with\_header](#webmockapiwith_header)
+* [webmock::api::with](#webmockapiwith)
+* [webmock::api::directive](#webmockapidirective)
+* [webmock::api::reset()](#webmockapireset)
+* [webmock::api::allow\_connecting\_to\_net()](#webmockapiallow_connecting_to_net)
+* [webmock::api::disallow\_connecting\_to\_net()](#webmockapidisallow_connecting_to_net)
+* [webmock::api::stub\_not\_found\_callback()](#webmockapistub_not_found_callback)
+* [webmock::adapter::cpp\_netlib::basic\_client](#webmockadaptercpp_netlibbasic_client)
+* [webmock::adapter::cpp\_netlib::select\_by\_type](#webmockadaptercpp_netlibselect_by_type)
+* [webmock::adapter::cpp\_netlib::select\_by\_param](#webmockadaptercpp_netlibselect_by_param)
+
 ### webmock::request
 
 The `webmock::request` is a structure to store a content of the request from the client.
@@ -471,6 +497,20 @@ In addition, the `with` class does not use, and instead the unary function can s
 a_stub(url).conditions([](webmock::request const & request){
     ...
 });
+```
+
+### webmock::api::directive
+
+This namespace is inline namespace, and it defines the directives such as `a_stub`, `a_response` and `with_method`. You will become not needing to write the namespace of the directives by using "using directive" to this namespace. The symbol names defined in this namespace are not general such as `a_stub`, `a_response` and `with_method`, so it will not conflict even if you used "using directive".
+
+```cpp
+using namespace webmock::api::directive;
+
+a_stub("http://www.boost.org")
+    .conditions(with_method("GET"))
+    .returns(a_response().body("response1"));
+
+a_request("http://www.boost.org").count();
 ```
 
 ### webmock::api::reset()
