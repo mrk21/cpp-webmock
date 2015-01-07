@@ -333,7 +333,7 @@ The following methods can also specify the content of the response as above:
 ```
 static_response & static_response::status(core::http::status const & status);
 static_response & static_response::body(core::http::body const & body);
-static_response & header(
+static_response & static_response::header(
     core::http::header_name const & name,
     core::http::header_value const & value
 );
