@@ -74,9 +74,10 @@ int main() {
     
     std::cout << "status: " << http::status(response) << std::endl;
     std::cout << "body: " << http::body(response) << std::endl;
-    std::cout << "access count: "                                                                   // 4.
-        << a_request("http://www.boost.org/").conditions(with_header("Connection","Close")).count() // 4.
-        << std::endl;                                                                               // 4.
+    std::cout << "access count: "                                  // 4.
+        << a_request("http://www.boost.org/")                      // 4.
+            .conditions(with_header("Connection","Close")).count() // 4.
+        << std::endl;                                              // 4.
     
     return 0;
 }
@@ -94,7 +95,7 @@ We did it! The response that is set by `a_stub` has been returned!
 
 ## Installation
 
-The cpp-webmock is header-only library, so you does not need to build. In order to use this library, you should prepare that listed below:
+The cpp-webmock is header-only library, so you do not need to build. In order to use this library, you should prepare that listed below:
 
 * Clang 3.5 (with -std=c++14)
 * Boost 1.56
@@ -173,9 +174,9 @@ a_stub::a_stub(with_url const & url);
 a_stub::a_stub(with_method const & method, with_url const & url);
 ```
 
-Specify a HTTP method to the `method` argument, and specify an URL to the `url` argument.
+The `method` argument specifies a HTTP method, and the `url` argument specifies an URL.
 
-A stub set by `a_stub` will be inserted to a head of the stub list. Then, when the client accessed, a stub matching the request will be found by linear search since a head in the stub list. Therefore, if it is found multiple, select a stub added after.
+A stub set by `a_stub` will be inserted to a head of the stub list. When the client accessed, a stub matching the request will be found by linear search since a head in the stub list. Therefore, if it is found multiple, selects a stub added after.
 
 ```cpp
 a_stub("http://www.boost.org/").returns(a_response().body("response 1"));
@@ -194,7 +195,7 @@ std::cout << http::body(response) << std::endl; // response 2
 a_stub & a_stub::returns(core::response_sequence const & response_sequence[, ...]);
 ```
 
-The `returns()` method sets the behavior returning a response. The behavior can be set multiple, and it returns the response on specified order when the client accessed every time. Then, if the number of access was greater than the number of the specified behaviors, it keeps to return a response of the behavior last specified.
+The `returns()` method sets the behavior returning a response. The behavior can be set multiple, and it returns the response on specified order when the client accessed every time. If the number of access was greater than the number of the specified behaviors, it keeps to return a response of the behavior last specified.
 
 ```cpp
 a_stub(url)
@@ -203,7 +204,7 @@ a_stub(url)
     .returns(a_response().body("response 3"));
 ```
 
-For example, if it specified as above, when the client accessed the `url`, it will return  responses shown below:
+For example, if it specified as above, when the client accessed the `url`, it will return responses shown below:
 
 ```
 response 1
@@ -345,7 +346,7 @@ a_response().status(200).body("test")
     .header("Set-Cookie", "b=2");
 ```
 
-The second form generates a response by the request. The `generator` specifies an unary function `webmock::request` that receives a request from the client:
+The second form generates a response by the request. The `generator` specifies an unary function that receives a request from the client:
 
 ```cpp
 a_response([](webmock::request const & request){
@@ -478,7 +479,7 @@ a_stub(url).conditions([](webmock::request const & request){
 void reset();
 ```
 
-This function clear the stub list and access histories. It will use on before and after each test.
+This function clears the stub list and access histories. It will use on before and after each test.
 
 ### webmock::api::allow\_connecting\_to\_net()
 
@@ -486,7 +487,7 @@ This function clear the stub list and access histories. It will use on before an
 void allow_connecting_to_net();
 ```
 
-This function enable `is_connecting_to_net` option. The client usually throws an exception if the stub satisfying the request not found, but if this option enabled, instead the corresponding original client accesses to the network really.
+This function enables `is_connecting_to_net` option. The client usually throws an exception if the stub satisfying the request not found, but if this option enabled, instead the corresponding original client accesses to the network really.
 
 ### webmock::api::disllow\_connecting\_to\_net()
 
@@ -494,7 +495,7 @@ This function enable `is_connecting_to_net` option. The client usually throws an
 void disllow_connecting_to_net();
 ```
 
-This function disable `is_connecting_to_net` option.
+This function disables `is_connecting_to_net` option.
 
 ### webmock::api::stub\_not\_found\_callback()
 
@@ -504,7 +505,7 @@ void stub_not_found_callback(
 );
 ```
 
-This function specifies a callback called when a stub satisfying the request not found. This callback is an unary function that receives the request, and it will use to throw an exception for assertion of testing framework. If the callback not specified, the callback will be set the default callback. In addition, if `is_connecting_to_net` option enabled, this callback is never called.
+This function specifies the callback `callback` called when a stub satisfying the request not found. This callback is an unary function that receives the request, and it will use to throw an exception for assertion of testing framework. If the callback not specified, the callback will be set the default callback. In addition, if `is_connecting_to_net` option enabled, this callback is never called.
 
 ```cpp
 webmock::api::stub_not_found_callback([](webmock::request const & request){
@@ -531,7 +532,8 @@ In addition, it defined alias `adapter::cpp_netlib::client` of the client type t
 
 ### webmock::adapter::cpp\_netlib::select\_by\_type
 
-You will usually use the macro shown below to replace the original client and the client type.
+You will usually use the macro shown below to switch the original client type and the client type.
+
 ```cpp
 #include <boost/network/protocol/http/client.hpp>
 
@@ -551,7 +553,7 @@ int main() {
 }
 ```
 
-However, if you want to replace these for little use, to implement this macro all of the time is bother. At times like this, when you use `select_by_type` meta function, you can switch easy.
+However, if you want to switch these for little use, to implement this macro all of the time is bother. At times like this, when you use `select_by_type` meta function, you can switch easy.
 
 ```cpp
 #include <boost/network/protocol/http/client.hpp>
@@ -568,11 +570,11 @@ int main() {
 }
 ```
 
-The first argument specifies a boolean value of whether to replace these. If specified the value that is evaluated to true, selects the adapter client type, and if specified the value that is evaluated to false, selects the original client type. The second argument specifies the original client that will be base.
+The first argument specifies a boolean value of whether to switch these. If specified the value that is evaluated to true, selects the adapter client type, and if specified the value that is evaluated to false, selects the original client type. The second argument specifies the original client type that will be base.
 
 ### webmock::adapter::cpp\_netlib::select\_by\_param
 
-This meta function can switch these as in the same way as `select_by_type` meta function, but instead it specifies the template parameter.
+This meta function can switch these as in the same way as `select_by_type` meta function, but instead it specifies the template parameters.
 
 ```cpp
 using client_type = typename webmock_adapter::select_by_param<USE_WEBMOCK,
