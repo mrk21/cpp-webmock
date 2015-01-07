@@ -489,10 +489,10 @@ void allow_connecting_to_net();
 
 This function enables `is_connecting_to_net` option. The client usually throws an exception if the stub satisfying the request not found, but if this option enabled, instead the corresponding original client accesses to the network really.
 
-### webmock::api::disllow\_connecting\_to\_net()
+### webmock::api::disallow\_connecting\_to\_net()
 
 ```cpp
-void disllow_connecting_to_net();
+void disallow_connecting_to_net();
 ```
 
 This function disables `is_connecting_to_net` option.
