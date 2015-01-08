@@ -6,7 +6,7 @@ set(build_dir ${CMAKE_CURRENT_LIST_DIR}/gen)
 if(NOT EXISTS ${build_dir})
   file(MAKE_DIRECTORY ${build_dir})
   execute_process(
-    COMMAND ${CMAKE_COMMAND} ..
+    COMMAND ${CMAKE_COMMAND} -DCOTIRE_MINIMUM_NUMBER_OF_TARGET_SOURCES=1 ..
     WORKING_DIRECTORY ${build_dir}
   )
 endif()

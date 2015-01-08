@@ -44,5 +44,6 @@ foreach(path IN LISTS sources)
     ${path}
     ${PROJECT_SOURCE_DIR}/lib/${basepath}.cpp
     ${PROJECT_SOURCE_DIR}/webmock/${basepath}.hpp
+    ${PROJECT_SOURCE_DIR}/webmock/${basepath}.ipp
   )
 endforeach()
