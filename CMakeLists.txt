@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 project(cpp-webmock)
 
+add_subdirectory(vendor)
+
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/vendor/cotire/CMake)
 include(cotire)
 
@@ -24,12 +26,12 @@ add_compile_options(
 )
 include_directories(
   ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/vendor/cpp-netlib
   ${Boost_INCLUDE_DIRS}
   ${OPENSSL_INCLUDE_DIR}
+  ${cpp-netlib_INCLUDE_DIRS}
 )
 link_directories(
-  ${PROJECT_SOURCE_DIR}/vendor/gen/cpp-netlib/libs/network/src
+  ${cpp-netlib_LIB_DIRS}
 )
 add_definitions(
   -DBOOST_NETWORK_ENABLE_HTTPS
@@ -40,8 +42,7 @@ set_directory_properties(PROPERTIES
 set(cpp-webmock_LIBRARIES
   ${Boost_LIBRARIES}
   ${OPENSSL_LIBRARIES}
-  cppnetlib-uri
-  cppnetlib-client-connections
+  ${cpp-netlib_LIBRARIES}
 )
 option(USE_LIBRARY "Use library" ON)
 

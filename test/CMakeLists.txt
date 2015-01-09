@@ -1,14 +1,12 @@
 include_directories(
+  ${bandit_with_gmock_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/test
-  ${PROJECT_SOURCE_DIR}/vendor/bandit
-  ${PROJECT_SOURCE_DIR}/vendor/bandit_with_gmock
-  ${PROJECT_SOURCE_DIR}/vendor/gmock/include
-  ${PROJECT_SOURCE_DIR}/vendor/gmock/gtest/include
 )
 link_directories(
-  ${PROJECT_BINARY_DIR}/test
-  ${PROJECT_SOURCE_DIR}/vendor/gen/gmock
-  ${PROJECT_SOURCE_DIR}/vendor/gen/gmock/gtest
+  ${bandit_with_gmock}
+)
+list(APPEND cpp-webmock_LIBRARIES
+  ${bandit_with_gmock_LIBRARIES}
 )
 
 file(GLOB_RECURSE sources *_spec.cpp)
@@ -21,9 +19,8 @@ add_executable(spec_runner
 )
 target_link_libraries(spec_runner
   ${cpp-webmock_LIBRARIES}
-  gmock
-  gtest
 )
+add_dependencies(spec_runner vendor_develop)
 cotire(spec_runner)
 
 add_custom_target(spec

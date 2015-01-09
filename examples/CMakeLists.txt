@@ -1,4 +1,5 @@
 add_custom_target(example)
+add_dependencies(example vendor_product)
 
 file(GLOB sources "*.cpp")
 

@@ -6,5 +6,7 @@ foreach(path IN LISTS sources)
 endforeach()
 
 add_library(webmock ${sources} ${headers})
+add_dependencies(webmock vendor_product)
 set_target_properties(webmock PROPERTIES COMPILE_FLAGS "-x c++")
 cotire(webmock)
+
