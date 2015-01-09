@@ -29,5 +29,4 @@
 
 # Others
 /gen/
-/vendor/gen/
 .clang_complete
