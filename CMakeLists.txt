@@ -28,10 +28,10 @@ include_directories(
   ${PROJECT_SOURCE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${OPENSSL_INCLUDE_DIR}
-  ${cpp-netlib_INCLUDE_DIRS}
+  ${vendor_product_INCLUDE_DIRS}
 )
 link_directories(
-  ${cpp-netlib_LIB_DIRS}
+  ${vendor_product_LIB_DIRS}
 )
 add_definitions(
   -DBOOST_NETWORK_ENABLE_HTTPS
@@ -39,10 +39,10 @@ add_definitions(
 set_directory_properties(PROPERTIES
   COTIRE_PREFIX_HEADER_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/vendor
 )
-set(cpp-webmock_LIBRARIES
+set(${CMAKE_PROJECT_NAME}_LIBRARIES
   ${Boost_LIBRARIES}
   ${OPENSSL_LIBRARIES}
-  ${cpp-netlib_LIBRARIES}
+  ${vendor_product_LIBRARIES}
 )
 option(USE_LIBRARY "Use library" ON)
 
