@@ -1,14 +1,4 @@
-include_directories(
-  ${PROJECT_SOURCE_DIR}/test
-  ${vendor_develop_INCLUDE_DIRS}
-)
-link_directories(
-  ${vendor_develop_LINK_DIRS}
-)
-list(APPEND ${CMAKE_PROJECT_NAME}_LIBRARIES
-  ${vendor_develop_LIBRARIES}
-)
-
+## build
 file(GLOB_RECURSE sources *_spec.cpp)
 file(GLOB_RECURSE headers RELATIVE ${PROJECT_SOURCE_DIR}/webmock *.hpp)
 
@@ -17,12 +7,19 @@ add_executable(spec_runner
   ${sources}
   ${headers}
 )
-target_link_libraries(spec_runner
-  ${${CMAKE_PROJECT_NAME}_LIBRARIES}
+target_include_directories(spec_runner PRIVATE
+  ${PROJECT_SOURCE_DIR}/test
+  ${vendor_develop_INCLUDE_DIRS}
+)
+target_link_libraries(spec_runner PRIVATE
+  webmock
+  ${vendor_develop_LIBRARIES}
 )
 add_dependencies(spec_runner vendor_develop)
 cotire(spec_runner)
 
+
+## test target
 add_custom_target(spec
   COMMAND $<TARGET_FILE:spec_runner> --reporter=spec
   DEPENDS spec_runner

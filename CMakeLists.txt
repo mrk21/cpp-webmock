@@ -1,10 +1,18 @@
 cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 project(cpp-webmock)
 
-add_subdirectory(vendor)
+execute_process(
+  COMMAND git submodule update
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/vendor/cotire/CMake)
 include(cotire)
+set_directory_properties(PROPERTIES
+  COTIRE_PREFIX_HEADER_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/vendor
+)
+
+option(USE_LIBRARY "Use library" ON)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
   if(CMAKE_CXX_COMPILER_VERSION LESS 3.5)
@@ -15,49 +23,15 @@ else()
   message(FATAL_ERROR "Supported compiler is Clang!")
 endif()
 
-find_package(Boost 1.56 REQUIRED system thread)
-find_package(OpenSSL REQUIRED)
-
 add_compile_options(
   -Wall
   -Wextra
   -Wno-unused-parameter
   -Wno-missing-field-initializers
 )
-include_directories(
-  ${PROJECT_SOURCE_DIR}
-  ${Boost_INCLUDE_DIRS}
-  ${OPENSSL_INCLUDE_DIR}
-  ${vendor_product_INCLUDE_DIRS}
-)
-link_directories(
-  ${vendor_product_LIB_DIRS}
-)
-add_definitions(
-  -DBOOST_NETWORK_ENABLE_HTTPS
-)
-set_directory_properties(PROPERTIES
-  COTIRE_PREFIX_HEADER_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/vendor
-)
-set(${CMAKE_PROJECT_NAME}_LIBRARIES
-  ${Boost_LIBRARIES}
-  ${OPENSSL_LIBRARIES}
-  ${vendor_product_LIBRARIES}
-)
-option(USE_LIBRARY "Use library" ON)
 
 enable_testing()
-
-if(USE_LIBRARY)
-  list(APPEND CMAKE_CXX_SOURCE_FILE_EXTENSIONS ipp)
-  include_regular_expression("^[^.]+$|[.]h$|[.]icc$|[.]hxx$|[.]hpp$")
-  
-  add_definitions(-DWEBMOCK_USE_LIBRARY)
-  link_directories(${PROJECT_SOURCE_DIR}/webmock)
-  list(APPEND cpp-webmock_LIBRARIES webmock)
-  
-  add_subdirectory(webmock)
-endif()
-
-add_subdirectory(examples)
+add_subdirectory(vendor)
+add_subdirectory(webmock)
 add_subdirectory(test)
+add_subdirectory(examples)
