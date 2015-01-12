@@ -1,6 +1,6 @@
 ## build
 file(GLOB_RECURSE sources *_spec.cpp)
-file(GLOB_RECURSE headers RELATIVE ${PROJECT_SOURCE_DIR}/webmock *.hpp)
+file(GLOB_RECURSE headers ${PROJECT_SOURCE_DIR}/webmock/*.hpp)
 
 add_executable(spec_runner
   spec_runner.cpp
