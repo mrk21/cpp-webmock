@@ -1,11 +1,14 @@
+if(NOT BUILD_TEST)
+  return()
+endif()
+
 ## build
-file(GLOB_RECURSE sources *_spec.cpp)
-file(GLOB_RECURSE headers ${PROJECT_SOURCE_DIR}/webmock/*.hpp)
+file(GLOB_RECURSE specs *_spec.cpp)
 
 add_executable(spec_runner
   spec_runner.cpp
-  ${sources}
-  ${headers}
+  ${specs}
+  ${webmock_headers}
 )
 target_include_directories(spec_runner PRIVATE
   ${PROJECT_SOURCE_DIR}/test
@@ -18,14 +21,12 @@ target_link_libraries(spec_runner PRIVATE
 add_dependencies(spec_runner vendor_develop)
 cotire(spec_runner)
 
-
 ## test target
 add_custom_target(spec
   COMMAND $<TARGET_FILE:spec_runner> --reporter=spec
   DEPENDS spec_runner
 )
-
-foreach(path IN LISTS sources)
+foreach(path IN LISTS specs)
   string(REPLACE ${PROJECT_SOURCE_DIR}/test/spec/ "" basepath ${path})
   string(REPLACE _spec.cpp "" basepath ${basepath})
   string(REPLACE / :: name webmock/${basepath})
@@ -34,10 +35,11 @@ foreach(path IN LISTS sources)
     NAME ${name}
     COMMAND $<TARGET_FILE:spec_runner> --only=${name}
   )
+  file(GLOB_RECURSE srcs ${PROJECT_SOURCE_DIR}/webmock/${basepath}/*.[hi]pp)
   set_property(TEST ${name} PROPERTY LABELS
     ${path}
-    ${PROJECT_SOURCE_DIR}/lib/${basepath}.cpp
     ${PROJECT_SOURCE_DIR}/webmock/${basepath}.hpp
     ${PROJECT_SOURCE_DIR}/webmock/${basepath}.ipp
+    ${srcs}
   )
 endforeach()

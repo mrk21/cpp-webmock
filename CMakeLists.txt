@@ -12,7 +12,11 @@ set_directory_properties(PROPERTIES
   COTIRE_PREFIX_HEADER_INCLUDE_PATH ${PROJECT_SOURCE_DIR}/vendor
 )
 
-option(USE_LIBRARY "Use library" ON)
+option(BUILD_LIBRARY "Whether to build the libraries" OFF)
+option(BUILD_TEST "Whether to build the tests" OFF)
+option(BUILD_EXAMPLE "Whether to build the examples" OFF)
+option(BUILD_DEPENDENCY "Whether to build the dependency libraries" OFF)
+option(BUILD_OPTIONAL_DEPENDENCY "Whether to build the optional dependency libraries" OFF)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
   if(CMAKE_CXX_COMPILER_VERSION LESS 3.5)

@@ -1,7 +1,11 @@
+if(NOT BUILD_EXAMPLE)
+  return()
+endif()
+
 add_custom_target(example)
 add_dependencies(example vendor_product)
 
-file(GLOB sources "*.cpp")
+file(GLOB sources *.cpp)
 
 foreach(path ${sources})
   get_filename_component(target ${path} NAME_WE)

@@ -70,7 +70,7 @@ namespace webmock { namespace core { namespace http {
     using body = std::string;
 }}}
 
-#ifndef WEBMOCK_USE_LIBRARY
+#ifndef WEBMOCK_BUILD_LIBRARY
 #include <webmock/core/http.ipp>
 #endif
 
