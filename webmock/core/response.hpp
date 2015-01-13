@@ -1,11 +1,8 @@
 #ifndef WEBMOCK_CORE_RESPONSE_HPP
 #define WEBMOCK_CORE_RESPONSE_HPP
 
-#include <string>
-#include <map>
-#include <iostream>
-#include <tuple>
 #include <webmock/core/http.hpp>
+#include <iostream>
 
 namespace webmock { namespace core {
     struct response {
@@ -14,23 +11,13 @@ namespace webmock { namespace core {
         http::headers headers;
     };
     
-    inline bool operator ==(response const & lop, response const & rop) {
-        return std::tie(lop.status, lop.body, lop.headers)
-            == std::tie(rop.status, rop.body, rop.headers);
-    }
-    
-    inline bool operator !=(response const & lop, response const & rop) {
-        return !(lop == rop);
-    }
-    
-    inline std::ostream & operator <<(std::ostream & lop, response const & rop) {
-        lop << rop.status << "\n";
-        for (auto && h: rop.headers) {
-            lop << h.first << ": " << h.second << "\n";
-        }
-        lop << rop.body << "\n";
-        return lop;
-    }
+    bool operator ==(response const & lop, response const & rop);
+    bool operator !=(response const & lop, response const & rop);
+    std::ostream & operator <<(std::ostream & lop, response const & rop);
 }}
+
+#ifndef WEBMOCK_BUILD_LIBRARY
+#include <webmock/core/response.ipp>
+#endif
 
 #endif
