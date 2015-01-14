@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0](https://github.com/mrk21/cpp-webmock/tree/v0.3.0) - 2015-01-14
+
+* Future [#18](https://github.com/mrk21/cpp-webmock/issues/18): Downloading and building of the external projects to embed to CMake script
+* Future [#13](https://github.com/mrk21/cpp-webmock/issues/13): To be able to easy use on the external project that uses CMake
+* Future [#12](https://github.com/mrk21/cpp-webmock/issues/12): Remedy build time
+
 ## [0.2.0](https://github.com/mrk21/cpp-webmock/tree/v0.2.0) - 2015-01-06
 
 * Future [#10](https://github.com/mrk21/cpp-webmock/issues/10): Adds the function of resetting the request log and the stub list
