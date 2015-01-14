@@ -115,7 +115,7 @@ project_root
 
 Second, you write the following content to added `external/CMakeLists.txt`:
 
-```cmake:external/CMakeLists.txt
+```cmake
 cmake_minimum_required(VERSION 3.0.2)
 
 include(ExternalProject)
@@ -132,7 +132,7 @@ ExternalProject_Add(webmock
 
 Finally, you append the following content to your project's `CMakeLists.txt`:
 
-```cmake:CMakeLists.txt
+```cmake
 cmake_minimum_required(VERSION 3.0.2)
 
 message("Building externals...")
