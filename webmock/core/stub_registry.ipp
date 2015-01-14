@@ -1,9 +1,5 @@
 #include <webmock/config.hpp>
 #include <webmock/core/stub_registry.hpp>
-#include <webmock/core/request.hpp>
-#include <webmock/core/response.hpp>
-#include <webmock/core/stub.hpp>
-#include <webmock/core/condition_list.hpp>
 #include <boost/range/algorithm.hpp>
 
 namespace webmock { namespace core {

@@ -103,32 +103,55 @@ The cpp-webmock is header-only library, so you do not need to build. In order to
 
 If you use CMake to build, you might want to as following:
 
-```cmake
+First, you add the `external` directory and `CMakeLists.txt` to your project:
+
+```
+project_root
+├── CMakeLists.txt
+├── src.cpp
+└── external            # Adding
+     └── CMakeLists.txt # Adding
+```
+
+Second, you write the following content to added `external/CMakeLists.txt`:
+
+```cmake:external/CMakeLists.txt
 cmake_minimum_required(VERSION 3.0.2)
 
-find_package(Boost 1.56 REQUIRED system thread)
-add_compile_options(-std=gnu++14 -stdlib=libc++)
-include_directories(${Boost_INCLUDE_DIRS} /path/to/cpp-webmock)
-set(libs ${Boost_LIBRARIES})
+include(ExternalProject)
 
-# If you use cpp-webmock, you need this code: [[
- include_directories(/path/to/cpp-netlib)
- link_directories(/path/to/cpp-netlib/libs/network/src)
- list(APPEND libs
-   cppnetlib-uri
-   cppnetlib-client-connections
- )
-# ]]
+ExternalProject_Add(webmock
+  GIT_REPOSITORY https://github.com/mrk21/cpp-webmock.git
+  GIT_TAG v0.3.0
+  PREFIX webmock
+  CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+    -DBUILD_LIBRARY=ON
+)
+```
 
-# If you want to use SSL on cpp-netlib, you need this code: [[
-  find_package(OpenSSL REQUIRED)
-  include_directories(${OPENSSL_INCLUDE_DIR})
-  list(APPEND libs ${OPENSSL_LIBRARIES})
-  add_definitions(-DBOOST_NETWORK_ENABLE_HTTPS)
-# ]]
+Finally, you append the following content to your project's `CMakeLists.txt`:
 
+```cmake:CMakeLists.txt
+cmake_minimum_required(VERSION 3.0.2)
+
+message("Building externals...")
+try_compile(external_status
+  ${PROJECT_BINARY_DIR}/external
+  ${PROJECT_SOURCE_DIR}/external
+  external
+  OUTPUT_VARIABLE external_result
+)
+if(NOT external_status)
+  message("${external_result}")
+  return()
+endif()
+message("Built externals")
+include(${PROJECT_BINARY_DIR}/external/webmock/lib/webmock.cmake)
+
+add_compile_options(-std=gnu++14)
 add_executable(bin src.cpp)
-target_link_libraries(bin ${libs})
+target_link_libraries(bin webmock::webmock)
 ```
 
 ## Reference
