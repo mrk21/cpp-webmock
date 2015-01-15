@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 project(cpp-webmock)
 
-execute_process(
-  COMMAND git submodule update
-  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-)
+execute_process(COMMAND git submodule init   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+execute_process(COMMAND git submodule update WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/vendor/cotire/CMake)
 include(cotire)
