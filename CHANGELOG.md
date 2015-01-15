@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1](https://github.com/mrk21/cpp-webmock/tree/v0.3.1) - 2015-01-15
+
+* Bugfix [#20](https://github.com/mrk21/cpp-webmock/issues/20): Fail to build on immediately after the `git clone`
+
 ## [0.3.0](https://github.com/mrk21/cpp-webmock/tree/v0.3.0) - 2015-01-14
 
 * Future [#18](https://github.com/mrk21/cpp-webmock/issues/18): Downloading and building of the external projects to embed to CMake script
