@@ -4,6 +4,7 @@
 #include <thread>
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
+#include <boost/range/algorithm.hpp>
 
 namespace webmock { namespace core {
 go_bandit([]{
@@ -82,6 +83,7 @@ go_bandit([]{
                         
                         // asserting
                         boost::optional<int> prev;
+                        boost::sort(responses);
                         for (auto && v: responses) {
                             if (prev) {
                                 AssertThat(v, Equals(*prev + 1));

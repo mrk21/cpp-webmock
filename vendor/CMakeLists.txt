@@ -31,7 +31,11 @@ if(BUILD_LIBRARY OR BUILD_TEST OR BUILD_DEPENDENCY)
     ## cpp-netlib
     ExternalProject_Add(cpp-netlib
       SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/cpp-netlib
-      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+      CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCPP-NETLIB_BUILD_TESTS=OFF
+        -DCPP-NETLIB_BUILD_EXAMPLES=OFF
+        -DCMAKE_CXX_FLAGS=${VENDOR_CXX_FLAGS}
     )
     ExternalProject_Get_Property(cpp-netlib INSTALL_DIR)
     add_dependencies(vendor_product cpp-netlib)
@@ -66,6 +70,7 @@ if(BUILD_TEST)
   # - google test
   ExternalProject_Add(google_mock
     SVN_REPOSITORY http://googlemock.googlecode.com/svn/tags/release-1.7.0
+    CMAKE_ARGS -DCMAKE_CXX_FLAGS=${VENDOR_CXX_FLAGS}
     INSTALL_COMMAND ""
     UPDATE_COMMAND ""
   )
