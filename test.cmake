@@ -19,7 +19,7 @@ if(NOT EXISTS ${build_dir})
     RESULT_VARIABLE result
   )
   if(NOT result EQUAL 0)
-    return()
+    message(FATAL_ERROR "")
   endif()
 endif()
 
@@ -29,7 +29,7 @@ execute_process(
   RESULT_VARIABLE result
 )
 if(NOT result EQUAL 0)
-  return()
+  message(FATAL_ERROR "")
 endif()
 
 execute_process(
@@ -38,5 +38,5 @@ execute_process(
   RESULT_VARIABLE result
 )
 if(NOT result EQUAL 0)
-  return()
+  message(FATAL_ERROR "")
 endif()
